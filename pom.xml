@@ -1,0 +1,74 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- Dự án của bạn -->
+  <groupId>org.example</groupId>
+  <artifactId>WEBCKY2</artifactId>
+  <packaging>war</packaging>
+  <version>1.0-SNAPSHOT</version>
+  <name>WEBCKY2 Maven Webapp</name>
+  <url>http://maven.apache.org</url>
+
+  <!-- Các phụ thuộc (dependencies) cho Hibernate và Spring Boot -->
+  <dependencies>
+    <!-- Spring Boot Starter Web (cho ứng dụng web với Spring MVC) -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+      <version>2.7.4</version>  <!-- Cập nhật phiên bản -->
+    </dependency>
+
+    <!-- Spring Boot Starter Data JPA (Hibernate) -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+      <version>2.7.4</version>  <!-- Cập nhật phiên bản -->
+    </dependency>
+
+    <!-- H2 Database (hoặc MySQL nếu bạn dùng MySQL) -->
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>2.1.214</version> <!-- Cập nhật phiên bản -->
+      <scope>runtime</scope>
+    </dependency>
+
+    <!-- Spring Boot Starter Security (Nếu bạn cần bảo mật cho ứng dụng) -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-security</artifactId>
+      <version>2.7.4</version>  <!-- Cập nhật phiên bản -->
+    </dependency>
+
+    <!-- Spring Boot Starter Thymeleaf (nếu bạn muốn sử dụng Thymeleaf cho view) -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-thymeleaf</artifactId>
+      <version>2.7.4</version>  <!-- Cập nhật phiên bản -->
+    </dependency>
+
+    <!-- JUnit (để chạy các bài kiểm tra) -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.1</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Thư viện Hibernate Core (Nếu cần riêng Hibernate mà không dùng Spring Data JPA) -->
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>5.6.5.Final</version> <!-- Cập nhật phiên bản -->
+    </dependency>
+  </dependencies>
+
+  <build>
+    <!-- Final name của ứng dụng khi đóng gói -->
+    <finalName>WEBCKY2</finalName>
+  </build>
+
+</project>
