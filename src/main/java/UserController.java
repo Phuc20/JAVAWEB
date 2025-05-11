@@ -1,30 +1,31 @@
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
-@RequestMapping("/users")  // duong dan chung cho cac yeu cau user
 public class UserController {
 
     @Autowired
     private UserService userService;
-
-    // Trang Login
+// day se la trang dki
     @GetMapping("/Register")
-    public String registerUser(@RequestParam String email, @RequestParam String password, @RequestParam String role) {
-        // tao user moi
-        User user = userService.createUser(email, password, role);
-        return "redirect:/users/Login";  // o day se chuyen huong denn  trang Login.jsp
+    public String showRegistrationForm() {
+        return "Register";  // chuyen den trang Register.jsp
+    }
+// o day se xu ly dki user
+    @PostMapping("/Register")
+    public String registerUser(@RequestParam String email,
+                               @RequestParam String password,
+                               @RequestParam String role) {
+        // o day se goi userService de tao user va luu vao csdl
+        userService.createUser(email, password, role);  // Đang ky user moi
+        return "redirect:/Login";  //Dang ky xong thi se chuyen den trang login
     }
 
-    // Trang login
     @GetMapping("/Login")
-    public String loginUser() {
-        return "Login";  // Tra ve trang Login.jsp 
+    public String showLoginPage() {
+        return "Login";  // chuyen den trang Login.jsp
     }
 }
-
-

@@ -1,3 +1,4 @@
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -15,7 +16,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)  // day chinh la vai tro ma ngdùng, co the la  "USER" orr "ADMIN"
+    @Column(nullable = false)  // role cua user ,  "USER" or "ADMIN"
     private String role;
 
     @Column(name = "created_at", updatable = false)

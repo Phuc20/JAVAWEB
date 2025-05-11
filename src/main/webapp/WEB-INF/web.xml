@@ -6,7 +6,7 @@
   <display-name>Archetype Created Web Application</display-name>
 
   <welcome-file-list>
-    <welcome-file>Login.jsp</welcome-file>
+    <welcome-file>Home.jsp</welcome-file>
   </welcome-file-list>
 
 </web-app>
