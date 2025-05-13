@@ -26,9 +26,9 @@ public class UserController {
         return "redirect:/Login";  // Chuyển hướng đến trang login
     }
 
-   @GetMapping("/Login")
+    @GetMapping("/Login")
     public String showLoginPage() {
-        return "Login";  // Trả về trang Login.jsp
+        System.out.println(">>> Đã vào /Login Controller");
+        return "Login";
     }
-
 }

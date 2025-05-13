@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
 
     // Trang Home có thể được truy cập bởi cả user và admin
-    /* @GetMapping("/Home")
+     @GetMapping("/Home")
     public String showHomePage() {
         return "Home";  // trả về home.jsp
-    } */
+    }
 }
