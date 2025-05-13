@@ -1,3 +1,5 @@
+package com.webcky2.config;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -11,15 +13,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/Login", "/Register").permitAll()  // Cho phep truy cap vao trang Login and Register cho tat ca cac role
-                .antMatchers("/Home").hasRole("ADMIN")// duy nhat admin truy cap
+                .antMatchers("/Register", "/Login").permitAll()  // Cho phép truy cập vào trang đăng ký và đăng nhập mà không cần xác thực
                 .anyRequest().authenticated()  // Yêu cầu xác thực cho tất cả các yêu cầu còn lại
                 .and()
                 .formLogin()
-                .loginPage("/Login")  // Chi dinh trang dang nhap
+                .loginPage("/Login")  // Định nghĩa trang đăng nhập
                 .permitAll()
                 .and()
                 .logout()
-                .permitAll();  // Cho phep logout
+                .permitAll();  // Cho phép logout
     }
 }

@@ -4,71 +4,100 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <!-- Dự án của bạn -->
   <groupId>org.example</groupId>
   <artifactId>WEBCKY2</artifactId>
   <packaging>war</packaging>
   <version>1.0-SNAPSHOT</version>
   <name>WEBCKY2 Maven Webapp</name>
-  <url>http://maven.apache.org</url>
 
-  <!-- Các phụ thuộc (dependencies) cho Hibernate và Spring Boot -->
+  <properties>
+    <java.version>1.8</java.version>
+    <spring.boot.version>2.7.4</spring.boot.version>
+  </properties>
+
   <dependencies>
-    <!-- Spring Boot Starter Web (cho ứng dụng web với Spring MVC) -->
+    <!-- Spring Boot Web -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
-      <version>2.7.4</version>  <!-- Cập nhật phiên bản -->
+      <version>${spring.boot.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-tomcat</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
-    <!-- Spring Boot Starter Data JPA (Hibernate) -->
+    <!-- Embed Tomcat -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-tomcat</artifactId>
+      <version>${spring.boot.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- JSP Support -->
+    <dependency>
+      <groupId>org.apache.tomcat.embed</groupId>
+      <artifactId>tomcat-embed-jasper</artifactId>
+      <version>9.0.68</version>
+    </dependency>
+
+    <!-- JSTL -->
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>jstl</artifactId>
+      <version>1.2</version>
+    </dependency>
+
+    <!-- Spring Data JPA -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
-      <version>2.7.4</version>  <!-- Cập nhật phiên bản -->
+      <version>${spring.boot.version}</version>
     </dependency>
 
-    <!-- H2 Database (hoặc MySQL nếu bạn dùng MySQL) -->
     <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <version>2.1.214</version> <!-- Cập nhật phiên bản -->
-      <scope>runtime</scope>
+      <groupId>javax.xml.bind</groupId>
+      <artifactId>jaxb-api</artifactId>
+      <version>2.3.1</version>
     </dependency>
 
-    <!-- Spring Boot Starter Security (Nếu bạn cần bảo mật cho ứng dụng) -->
+    <!-- MySQL Connector -->
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>8.0.33</version>
+    </dependency>
+
+    <!-- Spring Security -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-security</artifactId>
-      <version>2.7.4</version>  <!-- Cập nhật phiên bản -->
+      <version>${spring.boot.version}</version>
     </dependency>
 
-    <!-- Spring Boot Starter Thymeleaf (nếu bạn muốn sử dụng Thymeleaf cho view) -->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-thymeleaf</artifactId>
-      <version>2.7.4</version>  <!-- Cập nhật phiên bản -->
-    </dependency>
-
-    <!-- JUnit (để chạy các bài kiểm tra) -->
+    <!-- JUnit -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.13.1</version>
       <scope>test</scope>
     </dependency>
-
-    <!-- Thư viện Hibernate Core (Nếu cần riêng Hibernate mà không dùng Spring Data JPA) -->
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-core</artifactId>
-      <version>5.6.5.Final</version> <!-- Cập nhật phiên bản -->
-    </dependency>
   </dependencies>
 
   <build>
-    <!-- Final name của ứng dụng khi đóng gói -->
     <finalName>WEBCKY2</finalName>
+    <plugins>
+      <!-- Đảm bảo JSP không yêu cầu web.xml -->
+      <plugin>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>3.3.1</version>
+        <configuration>
+          <failOnMissingWebXml>false</failOnMissingWebXml>
+        </configuration>
+      </plugin><plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-compiler-plugin</artifactId><configuration><source>8</source><target>8</target><compilerArgs>--enable-preview</compilerArgs></configuration></plugin>
+    </plugins>
   </build>
-
 </project>
