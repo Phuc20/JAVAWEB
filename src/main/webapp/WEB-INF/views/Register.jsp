@@ -61,6 +61,7 @@
     <div class="form-container">
         <h2>Đăng ký tài khoản</h2>
         <form action="/Register" method="post">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
             <label for="username">Tên đăng nhập:</label>
             <input type="text" id="username" name="username" required>
 
@@ -73,7 +74,8 @@
             <input type="submit" value="Đăng ký">
         </form>
         <div class="link">
-            <p>Đã có tài khoản? <a href="Login.jsp">Đăng nhập</a></p>
+            <p>Đã có tài khoản? <a href="/Login">Đăng nhập</a>
+
         </div>
     </div>
 </body>

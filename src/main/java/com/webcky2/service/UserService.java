@@ -3,37 +3,41 @@ package com.webcky2.service;
 import com.webcky2.model.User;
 import com.webcky2.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.userdetails.*;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.Collections;
+
 @Service
-public class UserService {
+@Transactional
+public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
 
-    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-    // Phương thức tạo người dùng mới
-    public User createUser(String username, String password, String email, String role) {
-        // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
-        String encryptedPassword = passwordEncoder.encode(password);
-
-        // Tạo đối tượng User mới
-        User user = new User(username, encryptedPassword, email, role);  // Gán username, password, email, và role
-
-        // Lưu người dùng vào cơ sở dữ liệu
-        return userRepository.save(user);
+    public void createUser(String username, String password, String email, String role) {
+        System.out.println("Registering user: " + username + ", email: " + email);
+        User user = new User(username, passwordEncoder.encode(password), email, role);
+        userRepository.save(user);
+        System.out.println("User saved with id: " + user.getId());
     }
 
-    // Phương thức kiểm tra đăng nhập
-    public boolean checkLogin(String email, String password) {
-        User user = userRepository.findByEmail(email);
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username);
+        if (user == null)
+            throw new UsernameNotFoundException("Không tìm thấy người dùng: " + username);
 
-        // Kiểm tra mật khẩu nhập vào với mật khẩu mã hóa trong cơ sở dữ liệu
-        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
-            return true;  // Đăng nhập thành công
-        }
-        return false;  // Đăng nhập thất bại
+        return new org.springframework.security.core.userdetails.User(
+                user.getUsername(),
+                user.getPassword(),
+                Collections.singleton(new SimpleGrantedAuthority("ROLE_" + user.getRole()))
+        );
     }
 }

@@ -61,6 +61,7 @@
     <div class="form-container">
         <h2>Đăng nhập</h2>
         <form action="/Login" method="post">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
             <label for="username">Tên đăng nhập:</label>
             <input type="text" id="username" name="username" required>
 
