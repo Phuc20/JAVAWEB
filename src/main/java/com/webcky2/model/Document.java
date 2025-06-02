@@ -12,7 +12,8 @@ public class Document {
     private String title;
     private String description;
     private String filePath;
-    private Long uploadedBy;
+    private String  uploadedBy;
+    private String author;
 
     public Document() {
     }
@@ -49,11 +50,19 @@ public class Document {
         this.filePath = filePath;
     }
 
-    public Long getUploadedBy() {
+    public String  getUploadedBy() {
         return uploadedBy;
     }
 
-    public void setUploadedBy(Long uploadedBy) {
+    public void setUploadedBy(String  uploadedBy) {
         this.uploadedBy = uploadedBy;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 }
