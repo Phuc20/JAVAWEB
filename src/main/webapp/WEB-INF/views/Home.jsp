@@ -16,58 +16,110 @@
 
     /* Header */
     header {
-      background-color: white; padding: 15px 20px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      display: flex; justify-content: space-between; align-items: center;
+      background-color: white;
+      padding: 12px 24px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
-    .logo { font-size: 24px; font-weight: bold; color: #0099cc; }
-    .search-bar { flex-grow: 1; margin: 0 20px; }
-    .search-bar input {
-      width: 100%; max-width: 500px; padding: 8px 15px;
-      border: 1px solid #ddd; border-radius: 20px;
-    }
-    .user-actions button.upload-btn {
-      background-color: transparent;
-      border: none;
-      color: #333;
-      font-weight: bold;
-      cursor: pointer;
-      padding: 5px 10px;
-      font-size: 16px;
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+      color: #0099cc;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
     }
-    .user-actions button.upload-btn:hover {
-      color: #007bff;
+    .search-bar input {
+      width: 100%;
+      max-width: 500px;
+      padding: 10px 16px;
+      border: 1px solid #e0e0e0;
+      border-radius: 24px;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      background-color: #f8f9fa;
     }
+
+    .search-bar input:focus {
+      outline: none;
+      border-color: #0099cc;
+      box-shadow: 0 0 0 3px rgba(0,153,204,0.1);
+      background-color: white;
+    }
+  .user-actions button.upload-btn {
+    border: none;
+    color: black; /* màu chữ giống action-btn */
+    font-weight: 600;
+    cursor: pointer;
+    padding: 8px 14px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+  }
+
+#uploadBtn {
+  background-color: transparent !important;
+  color: white !important;
+  border-radius: 6px;
+  padding: 8px 16px;
+  transition: all 0.2s ease;
+}
+#uploadBtn:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  transform: translateY(-1px);
+}
+body:not(.dark-mode) #uploadBtn {
+  color: black !important;
+  border-color: black !important;
+}
+
+body:not(.dark-mode) #uploadBtn:hover {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+  .user-actions button.upload-btn:hover {
+    color: #0099cc;
+    background-color: rgba(0,153,204,0.1);
+    transform: translateY(-1px);
+  }
+
     .user-actions button.upload-btn i {
       font-size: 18px;
     }
-.user-actions {
-  display: flex;
-  gap: 15px; /* Khoảng cách giữa 2 nút */
-  align-items: center;
-}
+    .user-actions {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
 
-.action-btn {
-  background-color: transparent;
-  border: none;
-  color: #333;
-  font-weight: bold;
-  cursor: pointer;
-  padding: 5px 12px;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  border-radius: 4px;
-  transition: color 0.3s ease;
-}
+    .action-btn {
+      background-color: transparent;
+      border: none;
+      color: #555;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 8px 14px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
 
-.action-btn:hover {
-  color: #007bff;
-}
+    .action-btn:hover {
+      color: #0099cc;
+      background-color: rgba(0,153,204,0.1);
+      transform: translateY(-1px);
+    }
 
     /* Container */
     .container {
@@ -82,33 +134,60 @@
     }
 
     .slide-card {
-      background-color: white; border-radius: 5px; overflow: hidden;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      display: flex; flex-direction: column;
+      background-color: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
       height: 100%;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
+    .slide-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
     .slide-thumbnail {
       height: 180px;
-      background-color: #eee;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
     }
+
     .slide-thumbnail img {
       max-width: 100%;
       max-height: 100%;
       object-fit: contain;
     }
-
+    .slide-thumbnail::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.03);
+    }
     .slide-info {
-      padding: 15px; flex-grow: 1; display: flex; flex-direction: column;
+      padding: 16px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      border-top: 1px solid rgba(0,0,0,0.05);
     }
 
     .slide-title {
-      font-weight: bold; margin-bottom: 5px; color: #333;
-      word-break: break-word;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #333;
+      font-size: 16px;
+      line-height: 1.4;
+      cursor: pointer;
     }
+
     .slide-author, .slide-description, .slide-uploader {
       font-size: 14px; color: #666; margin-bottom: 5px;
       flex-shrink: 0;
@@ -130,9 +209,16 @@
     .slide-info a {
       color: #0099cc;
       text-decoration: none;
-      font-weight: bold;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: color 0.2s ease;
     }
-    .slide-info a:hover { text-decoration: underline; }
+    .slide-info a:hover {
+      color: #0077aa;
+      text-decoration: none;
+    }
 
     /* Buttons edit/delete */
     .btn-group {
@@ -143,16 +229,20 @@
       border: none;
       color: white;
       padding: 6px 12px;
-      margin-right: 10px;
+      margin-right: 8px;
       border-radius: 4px;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.2s ease;
     }
     .btn-group button.delete {
       background-color: #cc0000;
     }
+
     .btn-group button:hover {
-      opacity: 0.85;
+      opacity: 0.9;
+      transform: translateY(-1px);
     }
 
     /* Modal */
@@ -172,7 +262,7 @@
       max-width: 500px;
       position: relative;
     }
-    .close, .close-edit {
+    .close, .close-edit, .close-preview {
       color: #aaa; float: right;
       font-size: 28px; font-weight: bold;
       cursor: pointer;
@@ -180,7 +270,7 @@
       right: 15px;
       top: 10px;
     }
-    .close:hover, .close-edit:hover {
+    .close:hover, .close-edit:hover, .close-preview:hover {
       color: black;
     }
 
@@ -291,21 +381,152 @@
     .dark-mode .upload-btn {
       color: #e0e0e0;
     }
+   .upload-btn {
+     background-color: #0099cc;
+     color: white !important;
+     border-radius: 6px;
+     padding: 8px 16px;
+     transition: all 0.2s ease;
+   }
 
+    .upload-btn:hover {
+      background-color: #0088bb;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0,153,204,0.2);
+    }
     .dark-mode .action-btn:hover,
     .dark-mode .upload-btn:hover {
       color: #007bff;
     }
 
     .action-btn {
-      /* existing styles */
       transition: all 0.3s ease;
     }
 
     .action-btn:hover {
-      /* existing styles */
       transform: scale(1.05);
     }
+    .skeleton {
+      background-color: #f5f5f5;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .skeleton::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.3) 50%,
+        rgba(255,255,255,0) 100%);
+      animation: shimmer 1.5s infinite;
+    }
+
+    .skeleton-item {
+      background-color: #e0e0e0;
+      border-radius: 4px;
+    }
+
+    .dark-mode .skeleton {
+      background-color: #2d2d2d;
+    }
+
+    .dark-mode .skeleton-item {
+      background-color: #3d3d3d;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        padding: 12px;
+        gap: 12px;
+      }
+
+      .search-bar {
+        width: 100%;
+        margin: 0;
+      }
+
+      .user-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .slides-container {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      }
+
+      .modal-content {
+        width: 95%;
+        margin: 20% auto;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .slides-container {
+        grid-template-columns: 1fr;
+      }
+
+      .slide-thumbnail {
+        height: 150px;
+      }
+
+      .user-actions button span {
+        display: none;
+      }
+
+      .user-actions button i {
+        margin-right: 0;
+      }
+    }
+    /* Tooltip */
+    [data-tooltip] {
+      position: relative;
+    }
+
+    [data-tooltip]::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #333;
+      color: white;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease;
+    }
+
+    [data-tooltip]:hover::after {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .dark-mode [data-tooltip]::after {
+      background-color: #555;
+    }
+    body.dark-mode .user-actions button.upload-btn {
+      color: white !important;
+    }
+    body.dark-mode .user-actions button.action-btn.upload-btn {
+      color: white !important;
+    }
+    
+
+
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
@@ -316,41 +537,71 @@
     <input type="text" placeholder="Tìm kiếm slides, tác giả..." id="searchInput" />
   </div>
   <div class="user-actions">
-  <button id="themeToggle" class="action-btn">
-      <i class="fas fa-moon"></i> Dark Mode
+    <button id="themeToggle" class="action-btn" data-tooltip="Chuyển đổi chế độ sáng/tối">
+      <i class="fas fa-moon"></i> <span>Dark Mode</span>
     </button>
-    <button id="uploadBtn" class="upload-btn"><i class="fas fa-upload"></i> Tải lên</button>
-    <button id="logoutBtn" class="action-btn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</button>
-
+    <button id="uploadBtn" class="upload-btn" data-tooltip="Tải lên tài liệu mới">
+      <i class="fas fa-upload"></i> <span>Tải lên</span>
+    </button>
+    <button id="logoutBtn" class="action-btn">
+      <i class="fas fa-sign-out-alt"></i> <span>Đăng xuất</span>
+    </button>
   </div>
 </header>
-
+<div id="loadingSkeleton" class="slides-container" style="display: none;">
+  <div class="slide-card skeleton">
+    <div class="slide-thumbnail skeleton-item"></div>
+    <div class="slide-info">
+      <div class="skeleton-item" style="height: 20px; width: 80%; margin-bottom: 10px;"></div>
+      <div class="skeleton-item" style="height: 16px; width: 60%; margin-bottom: 8px;"></div>
+      <div class="skeleton-item" style="height: 14px; width: 90%; margin-bottom: 8px;"></div>
+      <div class="skeleton-item" style="height: 14px; width: 70%; margin-bottom: 15px;"></div>
+      <div class="skeleton-item" style="height: 14px; width: 30%;"></div>
+    </div>
+  </div>
+  <!-- Repeat skeleton items -->
+  <div class="slide-card skeleton">
+    <div class="slide-thumbnail skeleton-item"></div>
+    <div class="slide-info">
+      <div class="skeleton-item" style="height: 20px; width: 80%; margin-bottom: 10px;"></div>
+      <div class="skeleton-item" style="height: 16px; width: 60%; margin-bottom: 8px;"></div>
+      <div class="skeleton-item" style="height: 14px; width: 90%; margin-bottom: 8px;"></div>
+      <div class="skeleton-item" style="height: 14px; width: 70%; margin-bottom: 15px;"></div>
+      <div class="skeleton-item" style="height: 14px; width: 30%;"></div>
+    </div>
+  </div>
+</div>
 <div class="container">
   <h1>Tài liệu - Slide phổ biến</h1>
   <div class="slides-container" id="slidesContainer">
     <c:forEach var="doc" items="${documents}">
       <div class="slide-card"
-      data-title="${fn:toLowerCase(doc.title)}"
-             data-author="${fn:toLowerCase(doc.author)}">
+           data-title="${fn:toLowerCase(doc.title)}"
+           data-author="${fn:toLowerCase(doc.author)}">
         <div class="slide-thumbnail">
           <img src="/uploads/${fn:replace(doc.thumbnailPath, ' ', '%20')}" alt="Thumbnail" />
         </div>
         <div class="slide-info">
-<div class="slide-title" style="cursor:pointer;" data-filepath="${fn:escapeXml(doc.relativePath)}">${doc.title}</div>
+          <div class="slide-title" data-filepath="${fn:escapeXml(doc.relativePath)}">${doc.title}</div>
           <div class="slide-author">Tác giả: ${doc.author}</div>
           <div class="slide-description">${doc.description}</div>
           <div class="slide-uploader">Uploaded by: ${doc.uploadedBy}</div>
           <div>
-            <a href="/download?filePath=${fn:escapeXml(doc.relativePath)}" target="_blank">Download</a>
+            <a href="/download?filePath=${fn:escapeXml(doc.relativePath)}" target="_blank">
+              <i class="fas fa-download"></i> Download
+            </a>
           </div>
           <div class="btn-group">
             <button class="edit-btn"
-              data-id="${doc.id}"
-              data-title="${fn:escapeXml(doc.title)}"
-              data-author="${fn:escapeXml(doc.author)}"
-              data-description="${fn:escapeXml(doc.description)}"
-            >Sửa</button>
-            <button class="delete-btn delete" data-id="${doc.id}">Xoá</button>
+                    data-id="${doc.id}"
+                    data-title="${fn:escapeXml(doc.title)}"
+                    data-author="${fn:escapeXml(doc.author)}"
+                    data-description="${fn:escapeXml(doc.description)}">
+              <i class="fas fa-edit"></i> Sửa
+            </button>
+            <button class="delete-btn delete" data-id="${doc.id}">
+              <i class="fas fa-trash"></i> Xoá
+            </button>
           </div>
         </div>
       </div>
@@ -361,7 +612,7 @@
 <!-- Pagination -->
 <c:if test="${totalPages > 1}">
   <ul class="pagination" style="margin-top: 30px; display: flex; justify-content: center; list-style: none; padding: 0;">
-    <!-- Nút Previous -->
+    <!-- Previous Button -->
     <c:choose>
       <c:when test="${currentPage > 1}">
         <li><a href="?page=${currentPage - 1}">&laquo;</a></li>
@@ -374,7 +625,7 @@
     <c:set var="startPage" value="${currentPage - 2 > 1 ? currentPage - 2 : 1}" />
     <c:set var="endPage" value="${currentPage + 2 < totalPages ? currentPage + 2 : totalPages}" />
 
-    <!-- Trang đầu tiên -->
+    <!-- First Page -->
     <c:if test="${startPage > 1}">
       <li><a href="?page=1">1</a></li>
       <c:if test="${startPage > 2}">
@@ -382,7 +633,7 @@
       </c:if>
     </c:if>
 
-    <!-- Các trang chính giữa -->
+    <!-- Middle Pages -->
     <c:forEach var="i" begin="${startPage}" end="${endPage}">
       <c:choose>
         <c:when test="${i == currentPage}">
@@ -394,7 +645,7 @@
       </c:choose>
     </c:forEach>
 
-    <!-- Trang cuối cùng -->
+    <!-- Last Page -->
     <c:if test="${endPage < totalPages}">
       <c:if test="${endPage < totalPages - 1}">
         <li class="disabled"><span>...</span></li>
@@ -402,7 +653,7 @@
       <li><a href="?page=${totalPages}">${totalPages}</a></li>
     </c:if>
 
-    <!-- Nút Next -->
+    <!-- Next Button -->
     <c:choose>
       <c:when test="${currentPage < totalPages}">
         <li><a href="?page=${currentPage + 1}">&raquo;</a></li>
@@ -450,6 +701,8 @@
     </form>
   </div>
 </div>
+
+<!-- Logout Form -->
 <form id="logoutForm" action="/logout" method="post" style="display:none;">
   <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 </form>
@@ -457,8 +710,16 @@
 <!-- Preview Modal -->
 <div id="previewModal" class="modal">
   <div class="modal-content" style="width: 90%; height: 80vh; position: relative;">
-    <span class="close-preview" style="position:absolute; right:15px; top:10px; font-size:28px; cursor:pointer;">&times;</span>
+    <span class="close-preview">&times;</span>
     <iframe id="previewFrame" src="" style="width: 100%; height: 100%;" frameborder="0"></iframe>
+    <div id="unsupportedFileMessage" style="display: none; text-align: center; padding: 20px;">
+      <i class="fas fa-exclamation-triangle" style="font-size: 48px; color: #ff9800; margin-bottom: 15px;"></i>
+      <h3>Không thể xem trước loại file này</h3>
+      <p>Chức năng xem trước hiện chỉ hỗ trợ file PDF. Vui lòng tải xuống để xem nội dung.</p>
+      <button id="downloadFromPreview" class="submit-btn" style="margin-top: 15px;">
+        <i class="fas fa-download"></i> Tải xuống
+      </button>
+    </div>
   </div>
 </div>
 
@@ -488,55 +749,112 @@
 </div>
 
 <script>
-  // Modal Upload
+  // DOM Elements
   const uploadModal = document.getElementById("uploadModal");
-
-  const closeUpload = document.getElementsByClassName("close")[0];
-
-
-  closeUpload.onclick = () => {
-    uploadModal.style.display = "none";
-  };
-document.getElementById('uploadBtn').onclick = function() {
-  // Hiển thị modal upload như hiện tại
-  document.getElementById('uploadModal').style.display = 'block';
-};
-
-document.getElementById('logoutBtn').onclick = function() {
-  document.getElementById('logoutForm').submit();
-};
-  // Modal Edit
   const editModal = document.getElementById("editModal");
-  const closeEdit = document.getElementsByClassName("close-edit")[0];
-  const editForm = document.getElementById("editForm");
+  const previewModal = document.getElementById("previewModal");
+  const previewFrame = document.getElementById("previewFrame");
+  const unsupportedFileMessage = document.getElementById("unsupportedFileMessage");
+  const downloadFromPreview = document.getElementById("downloadFromPreview");
+  const searchInput = document.getElementById('searchInput');
+  const slidesContainer = document.getElementById('slidesContainer');
+  const loadingSkeleton = document.getElementById('loadingSkeleton');
 
-  document.querySelectorAll(".edit-btn").forEach(btn => {
-    btn.onclick = function() {
-      document.getElementById("edit-id").value = this.getAttribute("data-id");
-      document.getElementById("edit-title").value = this.getAttribute("data-title");
-      document.getElementById("edit-author").value = this.getAttribute("data-author");
-      document.getElementById("edit-description").value = this.getAttribute("data-description");
+  // Event Delegation for dynamic elements
+  document.addEventListener('click', function(e) {
+    // Upload Modal
+    if (e.target.id === 'uploadBtn' || e.target.closest('#uploadBtn')) {
+      uploadModal.style.display = 'block';
+    }
 
+    // Close Modals
+    else if (e.target.classList.contains('close') || e.target.classList.contains('close-edit') ||
+             e.target.classList.contains('close-preview')) {
+      e.target.closest('.modal').style.display = 'none';
+      if (e.target.classList.contains('close-preview')) {
+        previewFrame.src = '';
+        unsupportedFileMessage.style.display = 'none';
+      }
+    }
+
+    // Edit Buttons
+    else if (e.target.classList.contains('edit-btn') || e.target.closest('.edit-btn')) {
+      const btn = e.target.classList.contains('edit-btn') ? e.target : e.target.closest('.edit-btn');
+      document.getElementById("edit-id").value = btn.getAttribute("data-id");
+      document.getElementById("edit-title").value = btn.getAttribute("data-title");
+      document.getElementById("edit-author").value = btn.getAttribute("data-author");
+      document.getElementById("edit-description").value = btn.getAttribute("data-description");
       editModal.style.display = "block";
     }
+
+    // Delete Buttons
+    else if (e.target.classList.contains('delete-btn') || e.target.closest('.delete-btn')) {
+      const btn = e.target.classList.contains('delete-btn') ? e.target : e.target.closest('.delete-btn');
+      if (confirm("Bạn có chắc muốn xoá tài liệu này không?")) {
+        const id = btn.getAttribute("data-id");
+        const csrfToken = document.querySelector('input[name="${_csrf.parameterName}"]').value;
+
+        fetch('/documents/' + id, {
+          method: 'DELETE',
+          headers: { 'X-CSRF-TOKEN': csrfToken }
+        })
+        .then(response => {
+          if(response.ok) {
+            alert("Xoá thành công!");
+            location.reload();
+          } else {
+            alert("Xoá thất bại.");
+          }
+        })
+        .catch(() => alert("Lỗi khi xoá."));
+      }
+    }
+
+    // Preview Documents
+    else if (e.target.classList.contains('slide-title') || e.target.closest('.slide-title')) {
+      const titleEl = e.target.classList.contains('slide-title') ? e.target : e.target.closest('.slide-title');
+      const filePath = titleEl.getAttribute("data-filepath");
+      if (!filePath) return;
+
+      // Bỏ dấu / đầu nếu có
+      const path = filePath.startsWith("/") ? filePath.substring(1) : filePath;
+
+      // Encode từng phần của đường dẫn
+      const encodedPath = filePath.split('/').map(encodeURIComponent).join('/');
+
+      if (filePath.toLowerCase().endsWith(".pdf")) {
+        previewFrame.src = "/uploads/" + encodedPath;
+        unsupportedFileMessage.style.display = 'none';
+        previewModal.style.display = "block";
+      } else {
+        previewFrame.src = '';
+        unsupportedFileMessage.style.display = 'block';
+        downloadFromPreview.onclick = () => {
+          window.open("/download?filePath=" + encodedPath, '_blank');
+        };
+        previewModal.style.display = "block";
+      }
+    }
   });
 
-  closeEdit.onclick = () => {
-    editModal.style.display = "none";
-  };
-
-  // Đóng modal khi click ngoài
+  // Close modals when clicking outside
   window.addEventListener('click', event => {
-    if (event.target == uploadModal) {
-      uploadModal.style.display = "none";
-    }
-    if (event.target == editModal) {
-      editModal.style.display = "none";
+    if (event.target == uploadModal) uploadModal.style.display = "none";
+    if (event.target == editModal) editModal.style.display = "none";
+    if (event.target == previewModal) {
+      previewModal.style.display = "none";
+      previewFrame.src = '';
+      unsupportedFileMessage.style.display = 'none';
     }
   });
 
-  // Submit form sửa
-  editForm.onsubmit = function(e) {
+  // Logout
+  document.getElementById('logoutBtn').addEventListener('click', function() {
+    document.getElementById('logoutForm').submit();
+  });
+
+  // Submit Edit Form
+  document.getElementById("editForm").onsubmit = function(e) {
     e.preventDefault();
     const id = document.getElementById("edit-id").value;
     const title = document.getElementById("edit-title").value;
@@ -563,115 +881,63 @@ document.getElementById('logoutBtn').onclick = function() {
     .catch(() => alert("Lỗi khi cập nhật."));
   };
 
-  // Xoá tài liệu
-  document.querySelectorAll(".delete-btn").forEach(btn => {
-    btn.onclick = function() {
-      if (confirm("Bạn có chắc muốn xoá tài liệu này không?")) {
-        const id = this.getAttribute("data-id");
-        const csrfToken = document.querySelector('input[name="${_csrf.parameterName}"]').value;
-
-        fetch('/documents/' + id, {
-          method: 'DELETE',
-          headers: { 'X-CSRF-TOKEN': csrfToken }
-        })
-        .then(response => {
-          if(response.ok) {
-            alert("Xoá thành công!");
-            location.reload();
-          } else {
-            alert("Xoá thất bại.");
-          }
-        })
-        .catch(() => alert("Lỗi khi xoá."));
-      }
-    }
-  });
-
-  // Tìm kiếm slides
-  const searchInput = document.getElementById('searchInput');
-  const slidesContainer = document.getElementById('slidesContainer');
-
+  // Search Functionality
   searchInput.addEventListener('input', () => {
     const filter = searchInput.value.toLowerCase();
     const cards = slidesContainer.querySelectorAll('.slide-card');
-    cards.forEach(card => {
-      const title = card.getAttribute('data-title') || '';
-      const author = card.getAttribute('data-author') || '';
-      if(title.includes(filter) || author.includes(filter)) {
-        card.style.display = '';
-      } else {
-        card.style.display = 'none';
-      }
-    });
+
+    showLoadingSkeleton();
+
+    setTimeout(() => {
+      cards.forEach(card => {
+        const title = card.getAttribute('data-title') || '';
+        const author = card.getAttribute('data-author') || '';
+        if(title.includes(filter) || author.includes(filter)) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+      hideLoadingSkeleton();
+    }, 300);
   });
 
-  //xem truoc
-  var previewModal = document.getElementById("previewModal");
-  var previewFrame = document.getElementById("previewFrame");
-  var closePreview = document.getElementsByClassName("close-preview")[0];
+  // Theme Toggle
+  const themeToggle = document.getElementById('themeToggle');
+  const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+  const currentTheme = localStorage.getItem('theme');
 
- document.querySelectorAll(".slide-title").forEach(title => {
-   title.onclick = function() {
-     var filePath = this.getAttribute("data-filepath");
-     if (!filePath) return alert("Không có đường dẫn file.");
-
-     // Bỏ dấu / đầu nếu có
-     let path = filePath.startsWith("/") ? filePath.substring(1) : filePath;
-
-     // Encode từng phần của đường dẫn
-    const encodedPath = filePath.split('/').map(encodeURIComponent).join('/');
-    previewFrame.src = "/uploads/" + encodedPath;
-
-     if (filePath.toLowerCase().endsWith(".pdf")) {
-     console.log("Preview PDF:", "/uploads/" + encodedPath);
-
-       previewFrame.src = "/uploads/" + encodedPath;
-       previewModal.style.display = "block";
-     } else {
-       alert("Chức năng xem trước chỉ hỗ trợ file PDF.");
-     }
-   };
- });
-
-
-  closePreview.onclick = function() {
-    previewModal.style.display = "none";
-    previewFrame.src = ""; // reset iframe
-  }
-
-  window.onclick = function(event) {
-    if (event.target == previewModal) {
-      previewModal.style.display = "none";
-      previewFrame.src = ""; // reset iframe
-    }
-  }
-
-// Theme toggle functionality
-const themeToggle = document.getElementById('themeToggle');
-const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-const currentTheme = localStorage.getItem('theme');
-
-// Set initial theme
-if (currentTheme === 'dark' || (!currentTheme && prefersDarkScheme.matches)) {
-  document.body.classList.add('dark-mode');
-  themeToggle.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
-} else {
-  document.body.classList.remove('dark-mode');
-  themeToggle.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
-}
-
-// Toggle theme
-themeToggle.addEventListener('click', () => {
-  const isDark = document.body.classList.toggle('dark-mode');
-  if (isDark) {
-    themeToggle.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
-    localStorage.setItem('theme', 'dark');
+  // Set initial theme
+  if (currentTheme === 'dark' || (!currentTheme && prefersDarkScheme.matches)) {
+    document.body.classList.add('dark-mode');
+    themeToggle.innerHTML = '<i class="fas fa-sun"></i> <span>Light Mode</span>';
   } else {
-    themeToggle.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
-    localStorage.setItem('theme', 'light');
+    document.body.classList.remove('dark-mode');
+    themeToggle.innerHTML = '<i class="fas fa-moon"></i> <span>Dark Mode</span>';
   }
-});
 
+  // Toggle theme
+  themeToggle.addEventListener('click', () => {
+    const isDark = document.body.classList.toggle('dark-mode');
+    if (isDark) {
+      themeToggle.innerHTML = '<i class="fas fa-sun"></i> <span>Light Mode</span>';
+      localStorage.setItem('theme', 'dark');
+    } else {
+      themeToggle.innerHTML = '<i class="fas fa-moon"></i> <span>Dark Mode</span>';
+      localStorage.setItem('theme', 'light');
+    }
+  });
+
+  // Loading Skeleton Functions
+  function showLoadingSkeleton() {
+    slidesContainer.style.display = 'none';
+    loadingSkeleton.style.display = 'grid';
+  }
+
+  function hideLoadingSkeleton() {
+    slidesContainer.style.display = 'grid';
+    loadingSkeleton.style.display = 'none';
+  }
 </script>
 </body>
 </html>
