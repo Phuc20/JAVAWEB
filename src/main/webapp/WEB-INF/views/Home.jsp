@@ -1,4 +1,3 @@
-
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -6,61 +5,32 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simple SlideShare Clone</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ruler Slide</title>
   <style>
     * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
+      margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif;
     }
-
-    body {
-      background-color: #f5f5f5;
-    }
+    body { background-color: #f5f5f5; }
 
     /* Header */
     header {
-      background-color: white;
-      padding: 15px 20px;
+      background-color: white; padding: 15px 20px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      display: flex; justify-content: space-between; align-items: center;
     }
-
-    .logo {
-      font-size: 24px;
-      font-weight: bold;
-      color: #0099cc;
-    }
-
-    .search-bar {
-      flex-grow: 1;
-      margin: 0 20px;
-    }
-
+    .logo { font-size: 24px; font-weight: bold; color: #0099cc; }
+    .search-bar { flex-grow: 1; margin: 0 20px; }
     .search-bar input {
-      width: 100%;
-      max-width: 500px;
-      padding: 8px 15px;
-      border: 1px solid #ddd;
-      border-radius: 20px;
+      width: 100%; max-width: 500px; padding: 8px 15px;
+      border: 1px solid #ddd; border-radius: 20px;
     }
+    .user-actions a { margin-left: 15px; text-decoration: none; color: #333; }
 
-    .user-actions a {
-      margin-left: 15px;
-      text-decoration: none;
-      color: #333;
-    }
-
-    /* Main content */
+    /* Container */
     .container {
-      max-width: 1200px;
-      margin: 20px auto;
-      padding: 0 15px;
+      max-width: 1200px; margin: 20px auto; padding: 0 15px;
     }
 
     .slides-container {
@@ -71,10 +41,10 @@
     }
 
     .slide-card {
-      background-color: white;
-      border-radius: 5px;
-      overflow: hidden;
+      background-color: white; border-radius: 5px; overflow: hidden;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: flex; flex-direction: column;
+      height: 100%;
     }
 
     .slide-thumbnail {
@@ -83,36 +53,75 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #999;
+    }
+    .slide-thumbnail img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
     }
 
     .slide-info {
-      padding: 15px;
+      padding: 15px; flex-grow: 1; display: flex; flex-direction: column;
     }
 
     .slide-title {
+      font-weight: bold; margin-bottom: 5px; color: #333;
+      word-break: break-word;
+    }
+    .slide-author, .slide-description, .slide-uploader {
+      font-size: 14px; color: #666; margin-bottom: 5px;
+      flex-shrink: 0;
+    }
+
+    .slide-description {
+      flex-grow: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+    }
+
+    .slide-info div:last-child {
+      margin-top: auto;
+    }
+
+    .slide-info a {
+      color: #0099cc;
+      text-decoration: none;
       font-weight: bold;
-      margin-bottom: 5px;
-      color: #333;
     }
+    .slide-info a:hover { text-decoration: underline; }
 
-    .slide-author {
+    /* Buttons edit/delete */
+    .btn-group {
+      margin-top: 10px;
+    }
+    .btn-group button {
+      background-color: #0099cc;
+      border: none;
+      color: white;
+      padding: 6px 12px;
+      margin-right: 10px;
+      border-radius: 4px;
+      cursor: pointer;
       font-size: 14px;
-      color: #666;
+    }
+    .btn-group button.delete {
+      background-color: #cc0000;
+    }
+    .btn-group button:hover {
+      opacity: 0.85;
     }
 
-    /* Upload Modal */
+    /* Modal */
     .modal {
       display: none;
-      position: fixed;
-      z-index: 1;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
+      position: fixed; z-index: 1;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
       background-color: rgba(0,0,0,0.5);
     }
-
     .modal-content {
       background-color: #fefefe;
       margin: 10% auto;
@@ -120,17 +129,17 @@
       border-radius: 5px;
       width: 80%;
       max-width: 500px;
+      position: relative;
     }
-
-    .close {
-      color: #aaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
+    .close, .close-edit {
+      color: #aaa; float: right;
+      font-size: 28px; font-weight: bold;
       cursor: pointer;
+      position: absolute;
+      right: 15px;
+      top: 10px;
     }
-
-    .close:hover {
+    .close:hover, .close-edit:hover {
       color: black;
     }
 
@@ -138,30 +147,23 @@
     .form-group {
       margin-bottom: 15px;
     }
-
     .form-group label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
+      display: block; margin-bottom: 5px; font-weight: bold;
     }
-
     .form-group input[type="text"],
-    .form-group input[type="file"] {
+    .form-group input[type="file"],
+    .form-group textarea,
+    .form-group select {
       width: 100%;
       padding: 8px;
       border: 1px solid #ddd;
       border-radius: 4px;
+      font-size: 14px;
     }
-
     .form-group textarea {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
       min-height: 100px;
       resize: none;
     }
-
     .submit-btn {
       background-color: #0099cc;
       color: white;
@@ -169,8 +171,8 @@
       padding: 10px 15px;
       border-radius: 4px;
       cursor: pointer;
+      font-size: 16px;
     }
-
     .submit-btn:hover {
       background-color: #0077aa;
     }
@@ -180,7 +182,7 @@
 <header>
   <div class="logo">Ruler Document</div>
   <div class="search-bar">
-    <input type="text" placeholder="Tìm kiếm slides, tác giả...">
+    <input type="text" placeholder="Tìm kiếm slides, tác giả..." id="searchInput" />
   </div>
   <div class="user-actions">
     <a href="#" id="uploadBtn">Tải lên</a>
@@ -189,27 +191,33 @@
 
 <div class="container">
   <h1>Tài liệu - Slide phổ biến</h1>
-<div class="slides-container">
-  <c:forEach var="doc" items="${documents}">
-    <div class="slide-card">
-      <div class="slide-thumbnail">
-        <!-- Hiển thị icon file hoặc thumbnail nếu có -->
-        <span>📄</span>
-      </div>
-      <div class="slide-info">
-        <div class="slide-title">${doc.title}</div>
-        <div class="slide-author">Tác giả: ${doc.author}</div>
-        <div class="slide-description">${doc.description}</div>
-        <div class="slide-uploader">Uploaded by: ${doc.uploadedBy}</div>
-        <div>
-          <a href="/download?filePath=${fn:escapeXml(doc.filePath)}" target="_blank">Download</a>
+  <div class="slides-container" id="slidesContainer">
+    <c:forEach var="doc" items="${documents}">
+      <div class="slide-card" data-title="${fn:toLowerCase(doc.title)}">
+        <div class="slide-thumbnail">
+          <img src="/uploads/${fn:replace(doc.thumbnailPath, ' ', '%20')}" alt="Thumbnail" />
+        </div>
+        <div class="slide-info">
+          <div class="slide-title">${doc.title}</div>
+          <div class="slide-author">Tác giả: ${doc.author}</div>
+          <div class="slide-description">${doc.description}</div>
+          <div class="slide-uploader">Uploaded by: ${doc.uploadedBy}</div>
+          <div>
+            <a href="/download?filePath=${fn:escapeXml(doc.filePath)}" target="_blank">Download</a>
+          </div>
+          <div class="btn-group">
+            <button class="edit-btn"
+              data-id="${doc.id}"
+              data-title="${fn:escapeXml(doc.title)}"
+              data-author="${fn:escapeXml(doc.author)}"
+              data-description="${fn:escapeXml(doc.description)}"
+            >Sửa</button>
+            <button class="delete-btn delete" data-id="${doc.id}">Xoá</button>
+          </div>
         </div>
       </div>
-    </div>
-  </c:forEach>
-</div>
-
-  <!-- Slides grid would go here -->
+    </c:forEach>
+  </div>
 </div>
 
 <!-- Upload Modal -->
@@ -218,68 +226,175 @@
     <span class="close">&times;</span>
     <h2>Tải lên tài liệu</h2>
     <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
       <div class="form-group">
         <label for="title">Tiêu đề:</label>
-        <input type="text" id="title" name="title" required>
+        <input type="text" id="title" name="title" required />
       </div>
-
       <div class="form-group">
         <label for="author">Tác giả:</label>
-        <input type="text" id="author" name="author" required>
+        <input type="text" id="author" name="author" required />
       </div>
-
-       <div class="form-group">
-          <label for="description">Mô tả:</label>
-          <textarea id="description" name="description"></textarea>
-        </div>
-
-<div class="form-group">
-    <label for="uploadDir">Chọn thư mục lưu file:</label>
-    <select name="uploadDir" id="uploadDir">
-      <option value="D:/UPFILE/">D:\UPFILE</option>
-      <option value="C:/webcky2_uploads/">C:\webcky2_uploads</option>
-      <option value="D:/Download/">D:\Download</option>
-      <option value="D:/Desktop/">D:\Desktop</option>
-    </select>
-  </div>
-
+      <div class="form-group">
+        <label for="description">Mô tả:</label>
+        <textarea id="description" name="description"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="uploadDir">Chọn thư mục lưu file:</label>
+        <select name="uploadDir" id="uploadDir">
+          <option value="D:/UPFILE/">D:\UPFILE</option>
+          <option value="C:/webcky2_uploads/">C:\webcky2_uploads</option>
+          <option value="D:/Download/">D:\Download</option>
+          <option value="D:/Desktop/">D:\Desktop</option>
+        </select>
+      </div>
       <div class="form-group">
         <label for="file">Chọn tệp:</label>
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-        <input type="file" id="file" name="file" accept=".pdf,.ppt,.pptx,.doc,.docx" required>
+        <input type="file" id="file" name="file" accept=".pdf,.ppt,.pptx,.doc,.docx" required />
       </div>
-
       <button type="submit" class="submit-btn">Tải lên</button>
     </form>
   </div>
 </div>
 
+<!-- Edit Modal -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <span class="close-edit">&times;</span>
+    <h2>Sửa tài liệu</h2>
+    <form id="editForm">
+      <input type="hidden" id="edit-id" name="id" />
+      <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+      <div class="form-group">
+        <label for="edit-title">Tiêu đề:</label>
+        <input type="text" id="edit-title" name="title" required />
+      </div>
+      <div class="form-group">
+        <label for="edit-author">Tác giả:</label>
+        <input type="text" id="edit-author" name="author" required />
+      </div>
+      <div class="form-group">
+        <label for="edit-description">Mô tả:</label>
+        <textarea id="edit-description" name="description"></textarea>
+      </div>
+      <button type="submit" class="submit-btn">Lưu thay đổi</button>
+    </form>
+  </div>
+</div>
+
 <script>
-  // Get the modal
+  // Upload Modal
   var modal = document.getElementById("uploadModal");
-
-  // Get the button that opens the modal
   var btn = document.getElementById("uploadBtn");
-
-  // Get the <span> element that closes the modal
   var span = document.getElementsByClassName("close")[0];
 
-  // When the user clicks the button, open the modal
-  btn.onclick = function() {
-    modal.style.display = "block";
-  }
-
-  // When the user clicks on <span> (x), close the modal
-  span.onclick = function() {
-    modal.style.display = "none";
-  }
-
-  // When the user clicks anywhere outside of the modal, close it
+  btn.onclick = function() { modal.style.display = "block"; }
+  span.onclick = function() { modal.style.display = "none"; }
   window.onclick = function(event) {
     if (event.target == modal) {
       modal.style.display = "none";
     }
   }
+
+  // Edit Modal
+  var editModal = document.getElementById("editModal");
+  var editForm = document.getElementById("editForm");
+  var closeEdit = document.getElementsByClassName("close-edit")[0];
+
+  document.querySelectorAll(".edit-btn").forEach(btn => {
+    btn.onclick = function() {
+      var id = this.getAttribute("data-id");
+      var title = this.getAttribute("data-title");
+      var author = this.getAttribute("data-author");
+      var description = this.getAttribute("data-description");
+
+      document.getElementById("edit-id").value = id;
+      document.getElementById("edit-title").value = title;
+      document.getElementById("edit-author").value = author;
+      document.getElementById("edit-description").value = description;
+
+      editModal.style.display = "block";
+    }
+  });
+
+  closeEdit.onclick = function() {
+    editModal.style.display = "none";
+  }
+
+  window.onclick = function(event) {
+    if (event.target == editModal) {
+      editModal.style.display = "none";
+    }
+  }
+
+  // Submit edit form
+  editForm.onsubmit = function(e) {
+    e.preventDefault();
+    var id = document.getElementById("edit-id").value;
+    var title = document.getElementById("edit-title").value;
+    var author = document.getElementById("edit-author").value;
+    var description = document.getElementById("edit-description").value;
+    var csrfToken = document.querySelector('input[name="${_csrf.parameterName}"]').value;
+
+    fetch('/documents/' + id, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': csrfToken
+      },
+      body: JSON.stringify({ title, author, description })
+    })
+    .then(response => {
+      if(response.ok) {
+        alert("Cập nhật thành công!");
+        location.reload();
+      } else {
+        alert("Cập nhật thất bại.");
+      }
+    })
+    .catch(() => alert("Lỗi khi cập nhật."));
+  };
+
+  // Delete buttons
+  document.querySelectorAll(".delete-btn").forEach(btn => {
+    btn.onclick = function() {
+      if (confirm("Bạn có chắc muốn xoá tài liệu này không?")) {
+        var id = this.getAttribute("data-id");
+        var csrfToken = document.querySelector('input[name="${_csrf.parameterName}"]').value;
+
+        fetch('/documents/' + id, {
+          method: 'DELETE',
+          headers: { 'X-CSRF-TOKEN': csrfToken }
+        })
+        .then(response => {
+          if(response.ok) {
+            alert("Xoá thành công!");
+            location.reload();
+          } else {
+            alert("Xoá thất bại.");
+          }
+        })
+        .catch(() => alert("Lỗi khi xoá."));
+      }
+    }
+  });
+
+  // Search filter
+  var searchInput = document.getElementById('searchInput');
+  var slidesContainer = document.getElementById('slidesContainer');
+
+  searchInput.addEventListener('input', function() {
+    var filter = this.value.toLowerCase();
+    var cards = slidesContainer.querySelectorAll('.slide-card');
+    cards.forEach(card => {
+      var title = card.getAttribute('data-title');
+      if(title.includes(filter)) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  });
 </script>
 </body>
 </html>

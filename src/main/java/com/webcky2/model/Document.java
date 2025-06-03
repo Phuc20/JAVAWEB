@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "documents")
+
 public class Document {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,6 +15,7 @@ public class Document {
     private String filePath;
     private String  uploadedBy;
     private String author;
+    private String thumbnailPath;
 
     public Document() {
     }
@@ -65,4 +67,12 @@ public class Document {
     public void setAuthor(String author) {
         this.author = author;
     }
+    public String getThumbnailPath() {
+        return thumbnailPath;
+    }
+
+    public void setThumbnailPath(String thumbnailPath) {
+        this.thumbnailPath = thumbnailPath;
+    }
+
 }

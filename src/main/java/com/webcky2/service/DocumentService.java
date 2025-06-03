@@ -1,5 +1,6 @@
 package com.webcky2.service;
 
+import com.webcky2.PdfThumbnailGenerator;
 import com.webcky2.model.Document;
 import com.webcky2.repository.DocumentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 @Service
 public class DocumentService {
@@ -20,7 +22,7 @@ public class DocumentService {
     @Autowired
     private DocumentRepository documentRepository;
 
-    public void saveDocument(String title, String author, String description, MultipartFile file, String uploadDir) {
+    public void saveDocument(String title, String author, String description, MultipartFile file, String uploadDir) throws IOException {
         Document doc = new Document();
         doc.setTitle(title);
         doc.setAuthor(author);
@@ -35,6 +37,14 @@ public class DocumentService {
         String filePath = saveFileToDisk(file, uploadDir);
         doc.setFilePath(filePath);
 
+        if (file.getOriginalFilename().toLowerCase().endsWith(".pdf")) {
+            String thumbnailAbsolutePath = PdfThumbnailGenerator.generateThumbnail(filePath, uploadDir);
+            // Lấy tên file thumbnail
+            String thumbnailFileName = Paths.get(thumbnailAbsolutePath).getFileName().toString();
+            doc.setThumbnailPath(thumbnailFileName);
+        }
+
+
         documentRepository.save(doc);
     }
 
@@ -47,8 +57,9 @@ public class DocumentService {
             }
 
             // Tạo tên file duy nhất (timestamp + tên file gốc)
-            String originalFileName = file.getOriginalFilename();
+            String originalFileName = file.getOriginalFilename().replaceAll("\\s+", "_");
             String uniqueFileName = System.currentTimeMillis() + "_" + originalFileName;
+
 
             Path fileLocation = uploadPath.resolve(uniqueFileName);
 
@@ -66,4 +77,16 @@ public class DocumentService {
     public java.util.List<Document> getAllDocuments() {
         return documentRepository.findAll();
     }
+
+    public Optional<Document> getDocumentById(Long id) {
+        return documentRepository.findById(id);
+    }
+    public void deleteDocument(Long id) {
+        documentRepository.deleteById(id);
+    }
+
+    public Document save(Document doc) {
+        return documentRepository.save(doc);
+    }
+
 }

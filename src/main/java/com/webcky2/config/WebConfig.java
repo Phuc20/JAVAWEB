@@ -6,6 +6,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
@@ -16,5 +17,12 @@ public class WebConfig implements WebMvcConfigurer {
         resolver.setSuffix(".jsp");
         return resolver;
     }
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        // Cấu hình để client có thể truy cập file trong folder D:/UPFILE/
+        registry.addResourceHandler("/uploads/**")
+                .addResourceLocations("file:///D:/UPFILE/");
+    }
 }
+
 
