@@ -243,6 +243,69 @@
       background-color: #f5f5f5;
       border-color: #ddd;
     }
+    /* Dark Mode Styles */
+    body.dark-mode {
+      background-color: #121212;
+      color: #e0e0e0;
+    }
+
+    .dark-mode header {
+      background-color: #1e1e1e;
+      color: #ffffff;
+    }
+
+    .dark-mode .slide-card {
+      background-color: #2d2d2d;
+      color: #e0e0e0;
+    }
+
+    .dark-mode .slide-title,
+    .dark-mode .slide-author,
+    .dark-mode .slide-description,
+    .dark-mode .slide-uploader {
+      color: #b0b0b0;
+    }
+
+    .dark-mode .modal-content {
+      background-color: #2d2d2d;
+      color: #e0e0e0;
+    }
+
+    .dark-mode .form-group input[type="text"],
+    .dark-mode .form-group input[type="file"],
+    .dark-mode .form-group textarea,
+    .dark-mode .form-group select {
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+      border-color: #444;
+    }
+
+    .dark-mode .pagination a,
+    .dark-mode .pagination span {
+      background-color: #2d2d2d;
+      color: #e0e0e0;
+      border-color: #444;
+    }
+
+    .dark-mode .action-btn,
+    .dark-mode .upload-btn {
+      color: #e0e0e0;
+    }
+
+    .dark-mode .action-btn:hover,
+    .dark-mode .upload-btn:hover {
+      color: #007bff;
+    }
+
+    .action-btn {
+      /* existing styles */
+      transition: all 0.3s ease;
+    }
+
+    .action-btn:hover {
+      /* existing styles */
+      transform: scale(1.05);
+    }
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
@@ -253,6 +316,9 @@
     <input type="text" placeholder="Tìm kiếm slides, tác giả..." id="searchInput" />
   </div>
   <div class="user-actions">
+  <button id="themeToggle" class="action-btn">
+      <i class="fas fa-moon"></i> Dark Mode
+    </button>
     <button id="uploadBtn" class="upload-btn"><i class="fas fa-upload"></i> Tải lên</button>
     <button id="logoutBtn" class="action-btn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</button>
 
@@ -568,11 +634,6 @@ document.getElementById('logoutBtn').onclick = function() {
  });
 
 
-
-
-
-
-
   closePreview.onclick = function() {
     previewModal.style.display = "none";
     previewFrame.src = ""; // reset iframe
@@ -585,6 +646,31 @@ document.getElementById('logoutBtn').onclick = function() {
     }
   }
 
+// Theme toggle functionality
+const themeToggle = document.getElementById('themeToggle');
+const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+const currentTheme = localStorage.getItem('theme');
+
+// Set initial theme
+if (currentTheme === 'dark' || (!currentTheme && prefersDarkScheme.matches)) {
+  document.body.classList.add('dark-mode');
+  themeToggle.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+} else {
+  document.body.classList.remove('dark-mode');
+  themeToggle.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
+}
+
+// Toggle theme
+themeToggle.addEventListener('click', () => {
+  const isDark = document.body.classList.toggle('dark-mode');
+  if (isDark) {
+    themeToggle.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+    localStorage.setItem('theme', 'dark');
+  } else {
+    themeToggle.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
+    localStorage.setItem('theme', 'light');
+  }
+});
 
 </script>
 </body>
