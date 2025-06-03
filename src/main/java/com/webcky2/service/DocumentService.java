@@ -1,6 +1,7 @@
 package com.webcky2.service;
 
 import com.webcky2.PdfThumbnailGenerator;
+import com.webcky2.ThumbnailService;
 import com.webcky2.model.Document;
 import com.webcky2.repository.DocumentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,14 @@ import java.util.Optional;
 @Service
 public class DocumentService {
 
+    private final DocumentRepository documentRepository;
+    private final ThumbnailService thumbnailService;
+
     @Autowired
-    private DocumentRepository documentRepository;
+    public DocumentService(DocumentRepository documentRepository, ThumbnailService thumbnailService) {
+        this.documentRepository = documentRepository;
+        this.thumbnailService = thumbnailService;
+    }
 
     public void saveDocument(String title, String author, String description, MultipartFile file, String uploadDir) throws IOException {
         Document doc = new Document();
@@ -33,45 +40,42 @@ public class DocumentService {
         String username = auth.getName();
         doc.setUploadedBy(username);
 
-        // Xử lý lưu file
-        String filePath = saveFileToDisk(file, uploadDir);
-        doc.setFilePath(filePath);
+        // Tạo folder nếu chưa tồn tại
+        Path uploadPath = Paths.get(uploadDir);
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
 
-        if (file.getOriginalFilename().toLowerCase().endsWith(".pdf")) {
-            String thumbnailAbsolutePath = PdfThumbnailGenerator.generateThumbnail(filePath, uploadDir);
-            // Lấy tên file thumbnail
+        // Tạo tên file duy nhất (timestamp + tên file gốc)
+        String originalFileName = file.getOriginalFilename().replaceAll("\\s+", "_");
+        String uniqueFileName = System.currentTimeMillis() + "_" + originalFileName;
+
+        Path fileLocation = uploadPath.resolve(uniqueFileName);
+
+        // Lưu file lên ổ đĩa
+        file.transferTo(fileLocation.toFile());
+
+        // Gán đường dẫn file
+        doc.setFilePath(fileLocation.toString());
+
+        String lowerName = originalFileName.toLowerCase();
+
+        // Nếu file là PDF tạo thumbnail
+        if (lowerName.endsWith(".pdf")) {
+            String thumbnailAbsolutePath = PdfThumbnailGenerator.generateThumbnail(fileLocation.toString(), uploadDir);
             String thumbnailFileName = Paths.get(thumbnailAbsolutePath).getFileName().toString();
             doc.setThumbnailPath(thumbnailFileName);
         }
 
-
-        documentRepository.save(doc);
-    }
-
-    private String saveFileToDisk(MultipartFile file, String uploadDir) {
-        try {
-            // Tạo folder nếu chưa tồn tại
-            Path uploadPath = Paths.get(uploadDir);
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-            }
-
-            // Tạo tên file duy nhất (timestamp + tên file gốc)
-            String originalFileName = file.getOriginalFilename().replaceAll("\\s+", "_");
-            String uniqueFileName = System.currentTimeMillis() + "_" + originalFileName;
-
-
-            Path fileLocation = uploadPath.resolve(uniqueFileName);
-
-            // Lưu file lên ổ đĩa
-            file.transferTo(fileLocation.toFile());
-
-            // Trả về đường dẫn tương đối hoặc tuyệt đối (tuỳ bạn muốn lưu gì)
-            return fileLocation.toString();
-
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to save file", e);
+        // Nếu file là PPTX tạo thumbnail bằng thumbnailService
+        else if (lowerName.endsWith(".pptx")) {
+            File thumbnailFile = new File(uploadDir + "thumb_" + uniqueFileName + ".png");
+            thumbnailService.createPPTXThumbnail(fileLocation.toFile(), thumbnailFile);
+            doc.setThumbnailPath(thumbnailFile.getName());
         }
+
+        // Lưu document vào DB
+        documentRepository.save(doc);
     }
 
     public java.util.List<Document> getAllDocuments() {
@@ -81,6 +85,7 @@ public class DocumentService {
     public Optional<Document> getDocumentById(Long id) {
         return documentRepository.findById(id);
     }
+
     public void deleteDocument(Long id) {
         documentRepository.deleteById(id);
     }
@@ -88,5 +93,4 @@ public class DocumentService {
     public Document save(Document doc) {
         return documentRepository.save(doc);
     }
-
 }
