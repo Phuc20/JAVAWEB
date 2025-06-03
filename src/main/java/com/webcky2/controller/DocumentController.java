@@ -35,7 +35,15 @@ import java.io.IOException;
 import java.util.Optional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class DocumentController {
 
@@ -180,6 +188,34 @@ public class DocumentController {
     }
     public void save(Document doc) {
         documentRepository.save(doc);
+    }
+
+    @GetMapping("/download")
+    public ResponseEntity<Resource> downloadFile(@RequestParam("filePath") String relativePath) {
+        try {
+            // Thư mục gốc chứa file
+            Path uploadDir = Paths.get("D:/UPFILE/").toAbsolutePath().normalize();
+
+            // Ghép đường dẫn file đầy đủ từ đường dẫn tương đối
+            Path filePath = uploadDir.resolve(relativePath).normalize();
+
+            Resource resource = new UrlResource(filePath.toUri());
+
+            if (!resource.exists()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            // Lấy tên file
+            String fileName = filePath.getFileName().toString();
+
+            // Trả về file kèm header Content-Disposition để trình duyệt hiểu là download
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                    .body(resource);
+
+        } catch (MalformedURLException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 }
