@@ -1,5 +1,3 @@
-
-
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -28,7 +26,48 @@
       width: 100%; max-width: 500px; padding: 8px 15px;
       border: 1px solid #ddd; border-radius: 20px;
     }
-    .user-actions a { margin-left: 15px; text-decoration: none; color: #333; }
+    .user-actions button.upload-btn {
+      background-color: transparent;
+      border: none;
+      color: #333;
+      font-weight: bold;
+      cursor: pointer;
+      padding: 5px 10px;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .user-actions button.upload-btn:hover {
+      color: #007bff;
+    }
+    .user-actions button.upload-btn i {
+      font-size: 18px;
+    }
+.user-actions {
+  display: flex;
+  gap: 15px; /* Khoảng cách giữa 2 nút */
+  align-items: center;
+}
+
+.action-btn {
+  background-color: transparent;
+  border: none;
+  color: #333;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 5px 12px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 4px;
+  transition: color 0.3s ease;
+}
+
+.action-btn:hover {
+  color: #007bff;
+}
 
     /* Container */
     .container {
@@ -204,8 +243,8 @@
       background-color: #f5f5f5;
       border-color: #ddd;
     }
-
   </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body>
 <header>
@@ -214,7 +253,9 @@
     <input type="text" placeholder="Tìm kiếm slides, tác giả..." id="searchInput" />
   </div>
   <div class="user-actions">
-    <a href="#" id="uploadBtn">Tải lên</a>
+    <button id="uploadBtn" class="upload-btn"><i class="fas fa-upload"></i> Tải lên</button>
+    <button id="logoutBtn" class="action-btn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</button>
+
   </div>
 </header>
 
@@ -250,6 +291,7 @@
     </c:forEach>
   </div>
 </div>
+
 <!-- Pagination -->
 <c:if test="${totalPages > 1}">
   <ul class="pagination" style="margin-top: 30px; display: flex; justify-content: center; list-style: none; padding: 0;">
@@ -342,7 +384,9 @@
     </form>
   </div>
 </div>
-
+<form id="logoutForm" action="/logout" method="post" style="display:none;">
+  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+</form>
 <!-- Edit Modal -->
 <div id="editModal" class="modal">
   <div class="modal-content">
@@ -369,58 +413,61 @@
 </div>
 
 <script>
-  // Upload Modal
-  var modal = document.getElementById("uploadModal");
-  var btn = document.getElementById("uploadBtn");
-  var span = document.getElementsByClassName("close")[0];
+  // Modal Upload
+  const uploadModal = document.getElementById("uploadModal");
 
-  btn.onclick = function() { modal.style.display = "block"; }
-  span.onclick = function() { modal.style.display = "none"; }
-  window.onclick = function(event) {
-    if (event.target == modal) {
-      modal.style.display = "none";
-    }
-  }
+  const closeUpload = document.getElementsByClassName("close")[0];
 
-  // Edit Modal
-  var editModal = document.getElementById("editModal");
-  var editForm = document.getElementById("editForm");
-  var closeEdit = document.getElementsByClassName("close-edit")[0];
+
+  closeUpload.onclick = () => {
+    uploadModal.style.display = "none";
+  };
+document.getElementById('uploadBtn').onclick = function() {
+  // Hiển thị modal upload như hiện tại
+  document.getElementById('uploadModal').style.display = 'block';
+};
+
+document.getElementById('logoutBtn').onclick = function() {
+  document.getElementById('logoutForm').submit();
+};
+  // Modal Edit
+  const editModal = document.getElementById("editModal");
+  const closeEdit = document.getElementsByClassName("close-edit")[0];
+  const editForm = document.getElementById("editForm");
 
   document.querySelectorAll(".edit-btn").forEach(btn => {
     btn.onclick = function() {
-      var id = this.getAttribute("data-id");
-      var title = this.getAttribute("data-title");
-      var author = this.getAttribute("data-author");
-      var description = this.getAttribute("data-description");
-
-      document.getElementById("edit-id").value = id;
-      document.getElementById("edit-title").value = title;
-      document.getElementById("edit-author").value = author;
-      document.getElementById("edit-description").value = description;
+      document.getElementById("edit-id").value = this.getAttribute("data-id");
+      document.getElementById("edit-title").value = this.getAttribute("data-title");
+      document.getElementById("edit-author").value = this.getAttribute("data-author");
+      document.getElementById("edit-description").value = this.getAttribute("data-description");
 
       editModal.style.display = "block";
     }
   });
 
-  closeEdit.onclick = function() {
+  closeEdit.onclick = () => {
     editModal.style.display = "none";
-  }
+  };
 
-  window.onclick = function(event) {
+  // Đóng modal khi click ngoài
+  window.addEventListener('click', event => {
+    if (event.target == uploadModal) {
+      uploadModal.style.display = "none";
+    }
     if (event.target == editModal) {
       editModal.style.display = "none";
     }
-  }
+  });
 
-  // Submit edit form
+  // Submit form sửa
   editForm.onsubmit = function(e) {
     e.preventDefault();
-    var id = document.getElementById("edit-id").value;
-    var title = document.getElementById("edit-title").value;
-    var author = document.getElementById("edit-author").value;
-    var description = document.getElementById("edit-description").value;
-    var csrfToken = document.querySelector('input[name="${_csrf.parameterName}"]').value;
+    const id = document.getElementById("edit-id").value;
+    const title = document.getElementById("edit-title").value;
+    const author = document.getElementById("edit-author").value;
+    const description = document.getElementById("edit-description").value;
+    const csrfToken = document.querySelector('input[name="${_csrf.parameterName}"]').value;
 
     fetch('/documents/' + id, {
       method: 'PUT',
@@ -441,12 +488,12 @@
     .catch(() => alert("Lỗi khi cập nhật."));
   };
 
-  // Delete buttons
+  // Xoá tài liệu
   document.querySelectorAll(".delete-btn").forEach(btn => {
     btn.onclick = function() {
       if (confirm("Bạn có chắc muốn xoá tài liệu này không?")) {
-        var id = this.getAttribute("data-id");
-        var csrfToken = document.querySelector('input[name="${_csrf.parameterName}"]').value;
+        const id = this.getAttribute("data-id");
+        const csrfToken = document.querySelector('input[name="${_csrf.parameterName}"]').value;
 
         fetch('/documents/' + id, {
           method: 'DELETE',
@@ -465,25 +512,23 @@
     }
   });
 
-  // Search filter
-  var searchInput = document.getElementById('searchInput');
-  var slidesContainer = document.getElementById('slidesContainer');
+  // Tìm kiếm slides
+  const searchInput = document.getElementById('searchInput');
+  const slidesContainer = document.getElementById('slidesContainer');
 
- searchInput.addEventListener('input', function() {
-   var filter = this.value.toLowerCase();
-   var cards = slidesContainer.querySelectorAll('.slide-card');
-   cards.forEach(card => {
-     var title = card.getAttribute('data-title') || '';
-     var author = card.getAttribute('data-author') || '';
-     console.log('Filter:', filter, 'Title:', title, 'Author:', author);
-     if(title.includes(filter) || author.includes(filter)) {
-       card.style.display = '';
-     } else {
-       card.style.display = 'none';
-     }
-   });
- });
-
+  searchInput.addEventListener('input', () => {
+    const filter = searchInput.value.toLowerCase();
+    const cards = slidesContainer.querySelectorAll('.slide-card');
+    cards.forEach(card => {
+      const title = card.getAttribute('data-title') || '';
+      const author = card.getAttribute('data-author') || '';
+      if(title.includes(filter) || author.includes(filter)) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  });
 </script>
 </body>
 </html>
