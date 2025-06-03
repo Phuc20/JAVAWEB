@@ -270,12 +270,12 @@
           <img src="/uploads/${fn:replace(doc.thumbnailPath, ' ', '%20')}" alt="Thumbnail" />
         </div>
         <div class="slide-info">
-          <div class="slide-title">${doc.title}</div>
+<div class="slide-title" style="cursor:pointer;" data-filepath="${fn:escapeXml(doc.relativePath)}">${doc.title}</div>
           <div class="slide-author">Tác giả: ${doc.author}</div>
           <div class="slide-description">${doc.description}</div>
           <div class="slide-uploader">Uploaded by: ${doc.uploadedBy}</div>
           <div>
-            <a href="/download?filePath=${fn:escapeXml(doc.filePath)}" target="_blank">Download</a>
+            <a href="/download?filePath=${fn:escapeXml(doc.relativePath)}" target="_blank">Download</a>
           </div>
           <div class="btn-group">
             <button class="edit-btn"
@@ -387,6 +387,15 @@
 <form id="logoutForm" action="/logout" method="post" style="display:none;">
   <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 </form>
+
+<!-- Preview Modal -->
+<div id="previewModal" class="modal">
+  <div class="modal-content" style="width: 90%; height: 80vh; position: relative;">
+    <span class="close-preview" style="position:absolute; right:15px; top:10px; font-size:28px; cursor:pointer;">&times;</span>
+    <iframe id="previewFrame" src="" style="width: 100%; height: 100%;" frameborder="0"></iframe>
+  </div>
+</div>
+
 <!-- Edit Modal -->
 <div id="editModal" class="modal">
   <div class="modal-content">
@@ -529,6 +538,54 @@ document.getElementById('logoutBtn').onclick = function() {
       }
     });
   });
+
+  //xem truoc
+  var previewModal = document.getElementById("previewModal");
+  var previewFrame = document.getElementById("previewFrame");
+  var closePreview = document.getElementsByClassName("close-preview")[0];
+
+ document.querySelectorAll(".slide-title").forEach(title => {
+   title.onclick = function() {
+     var filePath = this.getAttribute("data-filepath");
+     if (!filePath) return alert("Không có đường dẫn file.");
+
+     // Bỏ dấu / đầu nếu có
+     let path = filePath.startsWith("/") ? filePath.substring(1) : filePath;
+
+     // Encode từng phần của đường dẫn
+    const encodedPath = filePath.split('/').map(encodeURIComponent).join('/');
+    previewFrame.src = "/uploads/" + encodedPath;
+
+     if (filePath.toLowerCase().endsWith(".pdf")) {
+     console.log("Preview PDF:", "/uploads/" + encodedPath);
+
+       previewFrame.src = "/uploads/" + encodedPath;
+       previewModal.style.display = "block";
+     } else {
+       alert("Chức năng xem trước chỉ hỗ trợ file PDF.");
+     }
+   };
+ });
+
+
+
+
+
+
+
+  closePreview.onclick = function() {
+    previewModal.style.display = "none";
+    previewFrame.src = ""; // reset iframe
+  }
+
+  window.onclick = function(event) {
+    if (event.target == previewModal) {
+      previewModal.style.display = "none";
+      previewFrame.src = ""; // reset iframe
+    }
+  }
+
+
 </script>
 </body>
 </html>

@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import com.webcky2.repository.DocumentRepository;
@@ -122,8 +123,6 @@ public class DocumentController {
             @RequestParam(value = "search", required = false) String search,
             @RequestParam(value = "page", defaultValue = "1") int page) {
 
-        System.out.println("Search keyword: " + search); // thêm dòng này để kiểm tra
-
         int pageSize = 8;
         Pageable pageable = PageRequest.of(page - 1, pageSize);
         Page<Document> documentPage;
@@ -132,6 +131,17 @@ public class DocumentController {
             documentPage = documentRepository.findAll(pageable);
         } else {
             documentPage = documentRepository.findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(search, search, pageable);
+        }
+
+        // Xử lý tạo relativePath trước khi gửi xuống view
+        for (Document doc : documentPage.getContent()) {
+            String fullPath = doc.getFilePath(); // ví dụ: "D:\\UPFILE\\1748877334774_Chuong_3-Giai_tich_1.pdf"
+            if (fullPath != null && fullPath.startsWith("D:\\UPFILE\\")) {
+                String relativePath = fullPath.substring("D:\\UPFILE\\".length()); // chỉ lấy tên file
+                doc.setRelativePath(relativePath.replace("\\", "/")); // chuyển \ thành / để URL chuẩn
+            } else {
+                doc.setRelativePath(""); // hoặc null, tùy bạn xử lý
+            }
         }
 
         model.addAttribute("documents", documentPage.getContent());

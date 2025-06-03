@@ -4,7 +4,6 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "documents")
-
 public class Document {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,13 +11,16 @@ public class Document {
 
     private String title;
     private String description;
-    private String filePath;
-    private String  uploadedBy;
+    private String filePath;         // chỉ khai báo 1 lần
+    private String uploadedBy;
     private String author;
     private String thumbnailPath;
+    private String relativePath;     // thêm trường này để lưu đường dẫn tương đối
 
     public Document() {
     }
+
+    // getter/setter cho tất cả thuộc tính
 
     public Long getId() {
         return id;
@@ -52,11 +54,11 @@ public class Document {
         this.filePath = filePath;
     }
 
-    public String  getUploadedBy() {
+    public String getUploadedBy() {
         return uploadedBy;
     }
 
-    public void setUploadedBy(String  uploadedBy) {
+    public void setUploadedBy(String uploadedBy) {
         this.uploadedBy = uploadedBy;
     }
 
@@ -67,6 +69,7 @@ public class Document {
     public void setAuthor(String author) {
         this.author = author;
     }
+
     public String getThumbnailPath() {
         return thumbnailPath;
     }
@@ -75,4 +78,11 @@ public class Document {
         this.thumbnailPath = thumbnailPath;
     }
 
+    public String getRelativePath() {
+        return relativePath;
+    }
+
+    public void setRelativePath(String relativePath) {
+        this.relativePath = relativePath;
+    }
 }
