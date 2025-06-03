@@ -1,4 +1,5 @@
 
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -221,7 +222,9 @@
   <h1>Tài liệu - Slide phổ biến</h1>
   <div class="slides-container" id="slidesContainer">
     <c:forEach var="doc" items="${documents}">
-      <div class="slide-card" data-title="${fn:toLowerCase(doc.title)}">
+      <div class="slide-card"
+      data-title="${fn:toLowerCase(doc.title)}"
+             data-author="${fn:toLowerCase(doc.author)}">
         <div class="slide-thumbnail">
           <img src="/uploads/${fn:replace(doc.thumbnailPath, ' ', '%20')}" alt="Thumbnail" />
         </div>
@@ -466,18 +469,21 @@
   var searchInput = document.getElementById('searchInput');
   var slidesContainer = document.getElementById('slidesContainer');
 
-  searchInput.addEventListener('input', function() {
-    var filter = this.value.toLowerCase();
-    var cards = slidesContainer.querySelectorAll('.slide-card');
-    cards.forEach(card => {
-      var title = card.getAttribute('data-title');
-      if(title.includes(filter)) {
-        card.style.display = '';
-      } else {
-        card.style.display = 'none';
-      }
-    });
-  });
+ searchInput.addEventListener('input', function() {
+   var filter = this.value.toLowerCase();
+   var cards = slidesContainer.querySelectorAll('.slide-card');
+   cards.forEach(card => {
+     var title = card.getAttribute('data-title') || '';
+     var author = card.getAttribute('data-author') || '';
+     console.log('Filter:', filter, 'Title:', title, 'Author:', author);
+     if(title.includes(filter) || author.includes(filter)) {
+       card.style.display = '';
+     } else {
+       card.style.display = 'none';
+     }
+   });
+ });
+
 </script>
 </body>
 </html>

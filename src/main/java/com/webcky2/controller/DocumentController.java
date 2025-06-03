@@ -1,4 +1,7 @@
 package com.webcky2.controller;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -114,22 +117,32 @@ public class DocumentController {
 
 
     @GetMapping("/documents")
-    public String listDocuments(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
+    public String listDocuments(
+            Model model,
+            @RequestParam(value = "search", required = false) String search,
+            @RequestParam(value = "page", defaultValue = "1") int page) {
+
+        System.out.println("Search keyword: " + search); // thêm dòng này để kiểm tra
+
         int pageSize = 8;
-        int totalDocuments = documentService.countDocuments();
-        int totalPages = (int) Math.ceil((double) totalDocuments / pageSize);
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        Page<Document> documentPage;
 
-        if (page > totalPages) page = totalPages;
-        if (page < 1) page = 1;
+        if (search == null || search.trim().isEmpty()) {
+            documentPage = documentRepository.findAll(pageable);
+        } else {
+            documentPage = documentRepository.findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(search, search, pageable);
+        }
 
-        List<Document> documents = documentService.findDocumentsByPage(page, pageSize);
-
-        model.addAttribute("documents", documents);
+        model.addAttribute("documents", documentPage.getContent());
         model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("totalPages", documentPage.getTotalPages());
+        model.addAttribute("search", search);
 
         return "Home";
     }
+
+
 
 
 
