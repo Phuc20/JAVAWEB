@@ -177,6 +177,33 @@
     .submit-btn:hover {
       background-color: #0077aa;
     }
+    .pagination li {
+      margin: 0 4px;
+    }
+
+    .pagination a, .pagination span {
+      padding: 6px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      color: #333;
+      text-decoration: none;
+      min-width: 36px;
+      text-align: center;
+      display: inline-block;
+    }
+
+    .pagination li.active span {
+      background-color: #0099cc;
+      color: white;
+      border-color: #0099cc;
+    }
+
+    .pagination li.disabled span {
+      color: #999;
+      background-color: #f5f5f5;
+      border-color: #ddd;
+    }
+
   </style>
 </head>
 <body>
@@ -220,6 +247,61 @@
     </c:forEach>
   </div>
 </div>
+<!-- Pagination -->
+<c:if test="${totalPages > 1}">
+  <ul class="pagination" style="margin-top: 30px; display: flex; justify-content: center; list-style: none; padding: 0;">
+    <!-- Nút Previous -->
+    <c:choose>
+      <c:when test="${currentPage > 1}">
+        <li><a href="?page=${currentPage - 1}">&laquo;</a></li>
+      </c:when>
+      <c:otherwise>
+        <li class="disabled"><span>&laquo;</span></li>
+      </c:otherwise>
+    </c:choose>
+
+    <c:set var="startPage" value="${currentPage - 2 > 1 ? currentPage - 2 : 1}" />
+    <c:set var="endPage" value="${currentPage + 2 < totalPages ? currentPage + 2 : totalPages}" />
+
+    <!-- Trang đầu tiên -->
+    <c:if test="${startPage > 1}">
+      <li><a href="?page=1">1</a></li>
+      <c:if test="${startPage > 2}">
+        <li class="disabled"><span>...</span></li>
+      </c:if>
+    </c:if>
+
+    <!-- Các trang chính giữa -->
+    <c:forEach var="i" begin="${startPage}" end="${endPage}">
+      <c:choose>
+        <c:when test="${i == currentPage}">
+          <li class="active"><span>${i}</span></li>
+        </c:when>
+        <c:otherwise>
+          <li><a href="?page=${i}">${i}</a></li>
+        </c:otherwise>
+      </c:choose>
+    </c:forEach>
+
+    <!-- Trang cuối cùng -->
+    <c:if test="${endPage < totalPages}">
+      <c:if test="${endPage < totalPages - 1}">
+        <li class="disabled"><span>...</span></li>
+      </c:if>
+      <li><a href="?page=${totalPages}">${totalPages}</a></li>
+    </c:if>
+
+    <!-- Nút Next -->
+    <c:choose>
+      <c:when test="${currentPage < totalPages}">
+        <li><a href="?page=${currentPage + 1}">&raquo;</a></li>
+      </c:when>
+      <c:otherwise>
+        <li class="disabled"><span>&raquo;</span></li>
+      </c:otherwise>
+    </c:choose>
+  </ul>
+</c:if>
 
 <!-- Upload Modal -->
 <div id="uploadModal" class="modal">

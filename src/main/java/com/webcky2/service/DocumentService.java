@@ -5,16 +5,20 @@ import com.webcky2.ThumbnailService;
 import com.webcky2.model.Document;
 import com.webcky2.repository.DocumentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import org.springframework.data.domain.Pageable;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -93,4 +97,14 @@ public class DocumentService {
     public Document save(Document doc) {
         return documentRepository.save(doc);
     }
+    public List<Document> findDocumentsByPage(int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        Page<Document> pageResult = documentRepository.findAll(pageable);
+        return pageResult.getContent();
+    }
+
+    public int countDocuments() {
+        return (int) documentRepository.count();
+    }
+
 }

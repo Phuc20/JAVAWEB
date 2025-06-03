@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
 import com.webcky2.repository.DocumentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,11 +42,8 @@ public class DocumentController {
 
     // Hiển thị trang chính
     @GetMapping("/Home")
-    public String showHome(Model model, HttpServletRequest request) {
-        CsrfToken token = (CsrfToken) request.getAttribute("_csrf");
-        model.addAttribute("_csrf", token);
-        model.addAttribute("documents", documentService.getAllDocuments());
-        return "Home";
+    public String showHome() {
+        return "redirect:/documents?page=1";
     }
 
     // Upload file
@@ -69,11 +67,14 @@ public class DocumentController {
 
         documentService.saveDocument(title, author, description, file, uploadDir);
 
-        model.addAttribute("message", "Tải lên thành công!");
-        model.addAttribute("documents", documentService.getAllDocuments());
+        int totalDocuments = documentService.countDocuments();
+        int pageSize = 8;
+        int lastPage = (int) Math.ceil((double) totalDocuments / pageSize);
 
-        return "redirect:/Home";
+        // Redirect đến trang cuối để thấy file mới upload
+        return "redirect:/documents?page=" + lastPage;
     }
+
 
     // Xoá tài liệu theo id
     @DeleteMapping("/documents/{id}")
@@ -110,6 +111,25 @@ public class DocumentController {
     }
     private final String basePath = "D:/UPFILE";
 
+
+
+    @GetMapping("/documents")
+    public String listDocuments(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
+        int pageSize = 8;
+        int totalDocuments = documentService.countDocuments();
+        int totalPages = (int) Math.ceil((double) totalDocuments / pageSize);
+
+        if (page > totalPages) page = totalPages;
+        if (page < 1) page = 1;
+
+        List<Document> documents = documentService.findDocumentsByPage(page, pageSize);
+
+        model.addAttribute("documents", documents);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+
+        return "Home";
+    }
 
 
 
