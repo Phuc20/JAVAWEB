@@ -14,7 +14,6 @@
     }
     body { background-color: #f5f5f5; }
 
-    /* Header */
     header {
       background-color: white;
       padding: 12px 24px;
@@ -37,7 +36,7 @@
     .search-bar input {
       width: 100%;
       max-width: 500px;
-      padding: 10px 16px;
+      padding: 10px 170px;
       border: 1px solid #e0e0e0;
       border-radius: 24px;
       font-size: 14px;
@@ -53,7 +52,7 @@
     }
   .user-actions button.upload-btn {
     border: none;
-    color: black; /* màu chữ giống action-btn */
+    color: black;
     font-weight: 600;
     cursor: pointer;
     padding: 8px 14px;
@@ -220,7 +219,6 @@ body:not(.dark-mode) #uploadBtn:hover {
       text-decoration: none;
     }
 
-    /* Buttons edit/delete */
     .btn-group {
       margin-top: 10px;
     }
@@ -245,7 +243,6 @@ body:not(.dark-mode) #uploadBtn:hover {
       transform: translateY(-1px);
     }
 
-    /* Modal */
     .modal {
       display: none;
       position: fixed; z-index: 1;
@@ -274,7 +271,6 @@ body:not(.dark-mode) #uploadBtn:hover {
       color: black;
     }
 
-    /* Form styles */
     .form-group {
       margin-bottom: 15px;
     }
@@ -333,7 +329,6 @@ body:not(.dark-mode) #uploadBtn:hover {
       background-color: #f5f5f5;
       border-color: #ddd;
     }
-    /* Dark Mode Styles */
     body.dark-mode {
       background-color: #121212;
       color: #e0e0e0;
@@ -488,7 +483,6 @@ body:not(.dark-mode) #uploadBtn:hover {
         margin-right: 0;
       }
     }
-    /* Tooltip */
     [data-tooltip] {
       position: relative;
     }
@@ -525,8 +519,6 @@ body:not(.dark-mode) #uploadBtn:hover {
       color: white !important;
     }
 
-
-
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
@@ -547,6 +539,11 @@ body:not(.dark-mode) #uploadBtn:hover {
       <i class="fas fa-sign-out-alt"></i> <span>Đăng xuất</span>
     </button>
   </div>
+      <div class="header-actions">
+<a href="/ThanhToan" class="thanhtoan-btn" title="Thanh Toán">
+  <i class="fa-regular fa-credit-card fa-xl" style="color: #000000;"></i>
+</a>
+    </div>
 </header>
 <div id="loadingSkeleton" class="slides-container" style="display: none;">
   <div class="slide-card skeleton">
@@ -645,7 +642,6 @@ body:not(.dark-mode) #uploadBtn:hover {
       </c:choose>
     </c:forEach>
 
-    <!-- Last Page -->
     <c:if test="${endPage < totalPages}">
       <c:if test="${endPage < totalPages - 1}">
         <li class="disabled"><span>...</span></li>
@@ -653,7 +649,6 @@ body:not(.dark-mode) #uploadBtn:hover {
       <li><a href="?page=${totalPages}">${totalPages}</a></li>
     </c:if>
 
-    <!-- Next Button -->
     <c:choose>
       <c:when test="${currentPage < totalPages}">
         <li><a href="?page=${currentPage + 1}">&raquo;</a></li>
@@ -665,7 +660,6 @@ body:not(.dark-mode) #uploadBtn:hover {
   </ul>
 </c:if>
 
-<!-- Upload Modal -->
 <div id="uploadModal" class="modal">
   <div class="modal-content">
     <span class="close">&times;</span>
@@ -684,15 +678,7 @@ body:not(.dark-mode) #uploadBtn:hover {
         <label for="description">Mô tả:</label>
         <textarea id="description" name="description"></textarea>
       </div>
-      <div class="form-group">
-        <label for="uploadDir">Chọn thư mục lưu file:</label>
-        <select name="uploadDir" id="uploadDir">
-          <option value="D:/UPFILE/">D:\UPFILE</option>
-          <option value="C:/webcky2_uploads/">C:\webcky2_uploads</option>
-          <option value="D:/Download/">D:\Download</option>
-          <option value="D:/Desktop/">D:\Desktop</option>
-        </select>
-      </div>
+
       <div class="form-group">
         <label for="file">Chọn tệp:</label>
         <input type="file" id="file" name="file" accept=".pdf,.ppt,.pptx,.doc,.docx" required />
@@ -702,16 +688,15 @@ body:not(.dark-mode) #uploadBtn:hover {
   </div>
 </div>
 
-<!-- Logout Form -->
 <form id="logoutForm" action="/logout" method="post" style="display:none;">
   <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 </form>
 
-<!-- Preview Modal -->
 <div id="previewModal" class="modal">
   <div class="modal-content" style="width: 90%; height: 80vh; position: relative;">
     <span class="close-preview">&times;</span>
     <iframe id="previewFrame" src="" style="width: 100%; height: 100%;" frameborder="0"></iframe>
+
     <div id="unsupportedFileMessage" style="display: none; text-align: center; padding: 20px;">
       <i class="fas fa-exclamation-triangle" style="font-size: 48px; color: #ff9800; margin-bottom: 15px;"></i>
       <h3>Không thể xem trước loại file này</h3>
@@ -723,7 +708,6 @@ body:not(.dark-mode) #uploadBtn:hover {
   </div>
 </div>
 
-<!-- Edit Modal -->
 <div id="editModal" class="modal">
   <div class="modal-content">
     <span class="close-edit">&times;</span>
@@ -747,7 +731,6 @@ body:not(.dark-mode) #uploadBtn:hover {
     </form>
   </div>
 </div>
-
 <script>
   // DOM Elements
   const uploadModal = document.getElementById("uploadModal");
@@ -777,7 +760,7 @@ body:not(.dark-mode) #uploadBtn:hover {
       }
     }
 
-    // Edit Buttons
+    // nút update
     else if (e.target.classList.contains('edit-btn') || e.target.closest('.edit-btn')) {
       const btn = e.target.classList.contains('edit-btn') ? e.target : e.target.closest('.edit-btn');
       document.getElementById("edit-id").value = btn.getAttribute("data-id");
@@ -787,7 +770,7 @@ body:not(.dark-mode) #uploadBtn:hover {
       editModal.style.display = "block";
     }
 
-    // Delete Buttons
+    // Nút delete
     else if (e.target.classList.contains('delete-btn') || e.target.closest('.delete-btn')) {
       const btn = e.target.classList.contains('delete-btn') ? e.target : e.target.closest('.delete-btn');
       if (confirm("Bạn có chắc muốn xoá tài liệu này không?")) {
@@ -938,6 +921,8 @@ body:not(.dark-mode) #uploadBtn:hover {
     slidesContainer.style.display = 'grid';
     loadingSkeleton.style.display = 'none';
   }
+
+
 </script>
 </body>
 </html>
