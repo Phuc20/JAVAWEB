@@ -17,7 +17,7 @@ public class WebConfig implements WebMvcConfigurer {
     }
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // Cấu hình để client có thể truy cập file trong folder D:/UPFILE/
+        // đây sẽ là cấu hình để client có thể nơi truy cập đến để upfile lên hệ thống
         registry.addResourceHandler("/uploads/**")
                 .addResourceLocations("file:///D:/UPFILE/");
     }

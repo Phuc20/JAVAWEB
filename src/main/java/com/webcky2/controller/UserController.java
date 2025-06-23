@@ -11,13 +11,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // Trang đăng ký
     @GetMapping("/Register")
     public String showRegistrationForm() {
-        return "Register";  // Trả về trang Register.jsp
+        return "Register";
     }
 
-    // Xử lý đăng ký
     @PostMapping("/Register")
     public String registerUser(@RequestParam String username,
                                @RequestParam String password,
@@ -28,17 +26,15 @@ public class UserController {
             return "redirect:/Login";
         } catch (Exception e) {
             e.printStackTrace();
-            return "Register";  // Nếu lỗi quay lại trang đăng ký
+            return "Register";
         }
     }
 
 
-    // Trang đăng nhập (chỉ để hiển thị form)
     @GetMapping("/Login")
     public String showLoginPage() {
-        return "Login";  // Trả về Login.jsp
+        return "Login";
     }
 
-    // Trang Home sau khi login thành công
-   
+
 }

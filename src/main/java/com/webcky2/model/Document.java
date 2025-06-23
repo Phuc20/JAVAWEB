@@ -11,16 +11,15 @@ public class Document {
 
     private String title;
     private String description;
-    private String filePath;         // chỉ khai báo 1 lần
+    private String filePath;
     private String uploadedBy;
     private String author;
     private String thumbnailPath;
-    private String relativePath;     // thêm trường này để lưu đường dẫn tương đối
+    private String relativePath;
 
     public Document() {
     }
 
-    // getter/setter cho tất cả thuộc tính
 
     public Long getId() {
         return id;

@@ -39,13 +39,12 @@ public class DocumentController {
     @Autowired
     private DocumentRepository documentRepository;
 
-    // Hiển thị trang chính
     @GetMapping("/Home")
     public String showHome() {
         return "redirect:/documents?page=1";
     }
 
-    // Upload file
+    // đây sẽ là chức năng up file
     @PostMapping("/upload")
     public String handleFileUpload(
             @RequestParam("title") String title,
@@ -75,7 +74,7 @@ public class DocumentController {
     }
 
 
-    // Xoá tài liệu theo id
+    // đây sẽ xoá file tlieu theo id, là id của người login vào
     @DeleteMapping("/documents/{id}")
     public ResponseEntity<?> deleteDocument(@PathVariable Long id) {
         Optional<Document> docOpt = documentRepository.findById(id);
@@ -103,7 +102,7 @@ public class DocumentController {
     private String buildThumbnailFullPath(String thumbnailPath) {
         Path path = Paths.get(thumbnailPath);
         if (path.isAbsolute()) {
-            return thumbnailPath; // dùng luôn
+            return thumbnailPath;
         } else {
             return Paths.get(basePath, thumbnailPath).toString();
         }
@@ -130,12 +129,12 @@ public class DocumentController {
 
         // Xử lý tạo relativePath trước khi gửi xuống view
         for (Document doc : documentPage.getContent()) {
-            String fullPath = doc.getFilePath(); // ví dụ: "D:\\UPFILE\\1748877334774_Chuong_3-Giai_tich_1.pdf"
+            String fullPath = doc.getFilePath();
             if (fullPath != null && fullPath.startsWith("D:\\UPFILE\\")) {
-                String relativePath = fullPath.substring("D:\\UPFILE\\".length()); // chỉ lấy tên file
-                doc.setRelativePath(relativePath.replace("\\", "/")); // chuyển \ thành / để URL chuẩn
+                String relativePath = fullPath.substring("D:\\UPFILE\\".length());
+                doc.setRelativePath(relativePath.replace("\\", "/"));
             } else {
-                doc.setRelativePath(""); // hoặc null, tùy bạn xử lý
+                doc.setRelativePath("");
             }
         }
 
@@ -147,11 +146,7 @@ public class DocumentController {
         return "Home";
     }
 
-
-
-
-
-    // Cập nhật thông tin tài liệu
+    // đây sẽ là updated tlieu
     @PutMapping("/documents/{id}")
     public ResponseEntity<?> updateDocument(
             @PathVariable Long id,
@@ -164,7 +159,7 @@ public class DocumentController {
 
         Document doc = docOpt.get();
 
-        // Chỉ cập nhật các trường có thể sửa (title, author, description)
+        // ở đây sẽ có những thứ để update như tên tiu đề, tác giả,mô tả tlieu
         doc.setTitle(updateDoc.getTitle());
         doc.setAuthor(updateDoc.getAuthor());
         doc.setDescription(updateDoc.getDescription());

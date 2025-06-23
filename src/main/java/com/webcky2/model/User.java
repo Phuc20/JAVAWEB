@@ -12,10 +12,10 @@ public class User {
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private String username;  // username is unique
+    private String username;
 
     @Column(unique = true, nullable = false)
-    private String email;  // email is unique
+    private String email;
 
     @Column(nullable = false)
     private String password;
@@ -26,10 +26,8 @@ public class User {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    // Constructor mặc định (bắt buộc)
     public User() {}
 
-    // Constructor có tham số
     public User(String username, String encryptedPassword, String email, String role) {
         this.username = username;
         this.password = encryptedPassword;
@@ -40,10 +38,9 @@ public class User {
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = LocalDateTime.now();  // tự động thiết lập ngày tạo
+        this.createdAt = LocalDateTime.now();  //  sẽ hiển thị ngày tạo tài khoản
     }
 
-    // Getters & Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

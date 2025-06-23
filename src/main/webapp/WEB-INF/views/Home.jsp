@@ -73,7 +73,7 @@
   transition: all 0.2s ease;
 }
 #uploadBtn:hover {
-  background-color: rgba(255, 255, 255, 0.1) !important;
+  background-color: rgba(0,153,204,0.1) !important;
   transform: translateY(-1px);
 }
 body:not(.dark-mode) #uploadBtn {
@@ -82,7 +82,7 @@ body:not(.dark-mode) #uploadBtn {
 }
 
 body:not(.dark-mode) #uploadBtn:hover {
-  background-color: rgba(0, 0, 0, 0.05) !important;
+  background-color: rgba(0,153,204,0.1);
 }
 
   .user-actions button.upload-btn:hover {
@@ -296,7 +296,7 @@ body:not(.dark-mode) #uploadBtn:hover {
       resize: none;
     }
     .submit-btn {
-      background-color: #0099cc;
+      background-color: #0088bb;
       color: white;
       border: none;
       padding: 10px 15px;
@@ -305,7 +305,7 @@ body:not(.dark-mode) #uploadBtn:hover {
       font-size: 16px;
     }
     .submit-btn:hover {
-      background-color: #0077aa;
+      background-color: #0088bb;
     }
     .pagination li {
       margin: 0 4px;
@@ -383,7 +383,7 @@ body:not(.dark-mode) #uploadBtn:hover {
     }
    .upload-btn {
      background-color: #0099cc;
-     color: white !important;
+     color: #0099cc !important;
      border-radius: 6px;
      padding: 8px 16px;
      transition: all 0.2s ease;
@@ -524,7 +524,7 @@ body:not(.dark-mode) #uploadBtn:hover {
     body.dark-mode .user-actions button.action-btn.upload-btn {
       color: white !important;
     }
-    
+
 
 
   </style>

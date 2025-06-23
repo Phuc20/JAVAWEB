@@ -5,10 +5,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-@Configuration
+@Configuration //class cauhinh
 public class AppConfig {
-    @Bean
+    @Bean //phuongthuc này sẽ trả về 1 đối tượng muốn spring qly
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }
+// đây là class mã hoá bmat
+// kiểm tra mật khẩu khi người dùng đăng nhập
