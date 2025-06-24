@@ -50,53 +50,54 @@
       box-shadow: 0 0 0 3px rgba(0,153,204,0.1);
       background-color: white;
     }
-  .user-actions button.upload-btn {
-    border: none;
-    color: black;
-    font-weight: 600;
-    cursor: pointer;
-    padding: 8px 14px;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    border-radius: 6px;
-    transition: all 0.2s ease;
-  }
+    .user-actions button.upload-btn {
+      border: none;
+      color: black;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 8px 14px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
 
-#uploadBtn {
-  background-color: transparent !important;
-  color: white !important;
-  border-radius: 6px;
-  padding: 8px 16px;
-  transition: all 0.2s ease;
-}
-#uploadBtn:hover {
-  background-color: rgba(0,153,204,0.1) !important;
-  transform: translateY(-1px);
-}
-body:not(.dark-mode) #uploadBtn {
-  color: black !important;
-  border-color: black !important;
-}
+    #uploadBtn {
+      background-color: transparent !important;
+      color: white !important;
+      border-radius: 6px;
+      padding: 8px 16px;
+      transition: all 0.2s ease;
+    }
+    #uploadBtn:hover {
+      background-color: rgba(0,153,204,0.1) !important;
+      transform: translateY(-1px);
+    }
+    body:not(.dark-mode) #uploadBtn {
+      color: black !important;
+      border-color: black !important;
+    }
 
-body:not(.dark-mode) #uploadBtn:hover {
-  background-color: rgba(0,153,204,0.1);
-}
+    body:not(.dark-mode) #uploadBtn:hover {
+      background-color: rgba(0,153,204,0.1);
+    }
 
-  .user-actions button.upload-btn:hover {
-    color: #0099cc;
-    background-color: rgba(0,153,204,0.1);
-    transform: translateY(-1px);
-  }
+    .user-actions button.upload-btn:hover {
+      color: #0099cc;
+      background-color: rgba(0,153,204,0.1);
+      transform: translateY(-1px);
+    }
 
     .user-actions button.upload-btn i {
       font-size: 18px;
     }
     .user-actions {
       display: flex;
-      gap: 15px;
       align-items: center;
+      justify-content: flex-end; /* đẩy tất cả về bên phải */
+      gap: 1px; /* khoảng cách giữa các nút */
     }
 
     .action-btn {
@@ -376,13 +377,13 @@ body:not(.dark-mode) #uploadBtn:hover {
     .dark-mode .upload-btn {
       color: #e0e0e0;
     }
-   .upload-btn {
-     background-color: #0099cc;
-     color: #0099cc !important;
-     border-radius: 6px;
-     padding: 8px 16px;
-     transition: all 0.2s ease;
-   }
+    .upload-btn {
+      background-color: #0099cc;
+      color: #0099cc !important;
+      border-radius: 6px;
+      padding: 8px 16px;
+      transition: all 0.2s ease;
+    }
 
     .upload-btn:hover {
       background-color: #0088bb;
@@ -415,9 +416,9 @@ body:not(.dark-mode) #uploadBtn:hover {
       right: 0;
       bottom: 0;
       background: linear-gradient(90deg,
-        rgba(255,255,255,0) 0%,
-        rgba(255,255,255,0.3) 50%,
-        rgba(255,255,255,0) 100%);
+      rgba(255,255,255,0) 0%,
+      rgba(255,255,255,0.3) 50%,
+      rgba(255,255,255,0) 100%);
       animation: shimmer 1.5s infinite;
     }
 
@@ -518,6 +519,41 @@ body:not(.dark-mode) #uploadBtn:hover {
     body.dark-mode .user-actions button.action-btn.upload-btn {
       color: white !important;
     }
+    /* Nút thanh toán (light mode) */
+    .thanhtoan-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      background: white;
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .thanhtoan-btn:hover {
+      background: #0099cc19;
+    }
+
+    .thanhtoan-btn i {
+      flex-shrink: 0;
+    }
+
+    /* Khi dark mode */
+    body.dark-mode .thanhtoan-btn {
+      background: #212121
+    ;
+      color: white;
+    }
+
+    body.dark-mode .thanhtoan-btn:hover {
+      color: #007bff;
+    }
+
+
+
 
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -529,6 +565,7 @@ body:not(.dark-mode) #uploadBtn:hover {
     <input type="text" placeholder="Tìm kiếm slides, tác giả..." id="searchInput" />
   </div>
   <div class="user-actions">
+
     <button id="themeToggle" class="action-btn" data-tooltip="Chuyển đổi chế độ sáng/tối">
       <i class="fas fa-moon"></i> <span>Dark Mode</span>
     </button>
@@ -538,12 +575,13 @@ body:not(.dark-mode) #uploadBtn:hover {
     <button id="logoutBtn" class="action-btn">
       <i class="fas fa-sign-out-alt"></i> <span>Đăng xuất</span>
     </button>
+    <a href="/ThanhToan" class="thanhtoan-btn" title="Thanh Toán">
+      <span id="balanceAmount">1.500.000đ</span>
+      <i class="fa-regular fa-credit-card fa-xl" ></i>
+    </a>
   </div>
-      <div class="header-actions">
-<a href="/ThanhToan" class="thanhtoan-btn" title="Thanh Toán">
-  <i class="fa-regular fa-credit-card fa-xl" style="color: #000000;"></i>
-</a>
-    </div>
+
+
 </header>
 <div id="loadingSkeleton" class="slides-container" style="display: none;">
   <div class="slide-card skeleton">
@@ -752,7 +790,7 @@ body:not(.dark-mode) #uploadBtn:hover {
 
     // Close Modals
     else if (e.target.classList.contains('close') || e.target.classList.contains('close-edit') ||
-             e.target.classList.contains('close-preview')) {
+      e.target.classList.contains('close-preview')) {
       e.target.closest('.modal').style.display = 'none';
       if (e.target.classList.contains('close-preview')) {
         previewFrame.src = '';
@@ -781,15 +819,15 @@ body:not(.dark-mode) #uploadBtn:hover {
           method: 'DELETE',
           headers: { 'X-CSRF-TOKEN': csrfToken }
         })
-        .then(response => {
-          if(response.ok) {
-            alert("Xoá thành công!");
-            location.reload();
-          } else {
-            alert("Xoá thất bại.");
-          }
-        })
-        .catch(() => alert("Lỗi khi xoá."));
+          .then(response => {
+            if(response.ok) {
+              alert("Xoá thành công!");
+              location.reload();
+            } else {
+              alert("Xoá thất bại.");
+            }
+          })
+          .catch(() => alert("Lỗi khi xoá."));
       }
     }
 
@@ -853,15 +891,15 @@ body:not(.dark-mode) #uploadBtn:hover {
       },
       body: JSON.stringify({ title, author, description })
     })
-    .then(response => {
-      if(response.ok) {
-        alert("Cập nhật thành công!");
-        location.reload();
-      } else {
-        alert("Cập nhật thất bại.");
-      }
-    })
-    .catch(() => alert("Lỗi khi cập nhật."));
+      .then(response => {
+        if(response.ok) {
+          alert("Cập nhật thành công!");
+          location.reload();
+        } else {
+          alert("Cập nhật thất bại.");
+        }
+      })
+      .catch(() => alert("Lỗi khi cập nhật."));
   };
 
   // Search Functionality
